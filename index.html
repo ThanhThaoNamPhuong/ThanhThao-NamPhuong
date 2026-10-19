@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Album Cưới | Thanh Thảo & Nam Phương</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cổ điển & Sang trọng (Hỗ trợ đầy đủ tiếng Việt) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <!-- Thư viện Fancybox v5 (Xem Album toàn màn hình, vuốt ảnh & tải ảnh) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+
+  <style>
+    :root {
+      --bg-cream: #F9F6F0;
+      --gold-primary: #B89655;
+      --gold-light: #DFC690;
+      --charcoal: #2C2523;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--charcoal);
+      background-image: radial-gradient(#e6dfd3 0.6px, transparent 0.6px);
+      background-size: 24px 24px;
+    }
+
+    .font-serif-luxury {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .font-script {
+      font-family: 'Great Vibes', cursive;
+    }
+
+    /* Khung viền cổ điển mạ vàng cho ảnh tiêu điểm */
+    .classic-frame {
+      position: relative;
+      padding: 14px;
+      background: #fff;
+      box-shadow: 0 20px 50px rgba(44, 37, 35, 0.12);
+      border: 1px solid #e5dccb;
+    }
+    .classic-frame::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 1px solid var(--gold-primary);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Bố cục Album Masonry */
+    .masonry-grid {
+      column-count: 2;
+      column-gap: 12px;
+    }
+    @media (min-width: 768px) {
+      .masonry-grid {
+        column-count: 3;
+        column-gap: 18px;
+      }
+    }
+    @media (min-width: 1280px) {
+      .masonry-grid {
+        column-count: 4;
+        column-gap: 22px;
+      }
+    }
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 12px;
+      background: #fff;
+      padding: 6px;
+      border: 1px solid #ece4d5;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    @media (min-width: 768px) {
+      .masonry-item {
+        margin-bottom: 18px;
+        padding: 8px;
+      }
+    }
+    .masonry-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 25px rgba(184, 150, 85, 0.18);
+    }
+
+    /* Vòng xoay Loading cổ điển sang trọng */
+    .luxury-spinner {
+      width: 64px;
+      height: 64px;
+      position: relative;
+      margin: 0 auto 20px auto;
+    }
+    .luxury-spinner::before,
+    .luxury-spinner::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+    }
+    .luxury-spinner::before {
+      inset: 0;
+      border: 2px solid rgba(184, 150, 85, 0.2);
+      border-top-color: var(--gold-primary);
+      animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    }
+    .luxury-spinner::after {
+      inset: 10px;
+      border: 1px dashed var(--gold-primary);
+      animation: spin-reverse 3s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes spin-reverse {
+      to { transform: rotate(-360deg); }
+    }
+
+    /* Hiệu ứng dấu chấm chuyển động " . . ." */
+    .dot-1 { animation: blink 1.5s infinite 0.0s; }
+    .dot-2 { animation: blink 1.5s infinite 0.3s; }
+    .dot-3 { animation: blink 1.5s infinite 0.6s; }
+    @keyframes blink {
+      0%, 20% { opacity: 0; }
+      50%, 100% { opacity: 1; }
+    }
+
+    /* Nút Server đang chọn */
+    .server-btn-active {
+      background-color: var(--charcoal);
+      color: #fff;
+      border-color: var(--charcoal);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-[#B89655] selection:text-white">
+
+  <!-- PHẦN 1: TRANG BÌA ALBUM & ẢNH CHỦ ĐỀ TIÊU ĐIỂM -->
+  <section class="relative min-h-screen flex flex-col justify-center items-center px-4 py-12 border-b border-[#e5dccb] bg-gradient-to-b from-[#F5EFE6] to-[#F9F6F0]">
+    
+    <!-- Hoa văn góc trang trí -->
+    <div class="text-center max-w-4xl mx-auto w-full">
+      <p class="text-xs md:text-sm uppercase tracking-[0.4em] text-[#8C7A5B] mb-3">
+        The Wedding Album
+      </p>
+
+      <!-- Tên Cô Dâu & Chú Rể -->
+      <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-semibold text-[#2C2523] tracking-wide mb-2">
+        Thanh Thảo <span class="font-script text-[#B89655] font-normal px-2">&amp;</span> Nam Phương
+      </h1>
+
+      <!-- Đường kẻ hoa văn cổ điển -->
+      <div class="flex items-center justify-center gap-4 my-5">
+        <span class="h-[1px] w-16 md:w-28 bg-[#B89655]/50"></span>
+        <span class="text-[#B89655] text-lg">❖</span>
+        <span class="h-[1px] w-16 md:w-28 bg-[#B89655]/50"></span>
+      </div>
+
+      <!-- Khung Ảnh Chủ Đề Tiêu Điểm -->
+      <div class="classic-frame max-w-2xl mx-auto my-6 rounded-sm overflow-hidden">
+        <a id="hero-link" href="cover.jpg" data-fancybox="hero-cover" data-caption="Thanh Thảo & Nam Phương">
+          <img id="hero-img" 
+               src="cover.jpg" 
+               alt="Ảnh cưới chủ đề Thanh Thảo & Nam Phương" 
+               class="w-full max-h-[62vh] object-cover block hover:scale-[1.02] transition-transform duration-700" />
+        </a>
+      </div>
+
+      <p class="font-serif-luxury italic text-xl md:text-2xl text-[#6E6259] mt-4">
+        "Trăm năm tình viên mãn – Bạc đầu nghĩa phu thê"
+      </p>
+
+      <!-- Nút cuộn xuống xem Album -->
+      <div class="mt-8">
+        <a href="#album-section" class="inline-flex items-center gap-2 px-7 py-3 bg-[#2C2523] text-[#F9F6F0] text-xs uppercase tracking-[0.25em] hover:bg-[#B89655] transition-colors duration-300 rounded-sm shadow">
+          <span>Mở Album Kỷ Niệm</span>
+          <span>↓</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHẦN 2: THANH ĐIỀU KHIỂN SERVER (STICKY BAR) -->
+  <nav id="album-section" class="sticky top-0 z-30 bg-[#F9F6F0]/95 backdrop-blur-md border-b border-[#e5dccb] py-3 px-4 shadow-sm">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      
+      <!-- Tiêu đề nhỏ khi cuộn trang -->
+      <div class="flex items-center gap-3">
+        <span class="font-serif-luxury font-bold text-xl md:text-2xl text-[#2C2523]">
+          Thanh Thảo &amp; Nam Phương
+        </span>
+        <span id="photo-count-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-[#EFE8DC] text-[#7A684B] border border-[#DFC690]">
+          Album Ảnh
+        </span>
+      </div>
+
+      <!-- Cụm nút chuyển đổi Server 1 (GitHub) và Server 2 (Google Drive) -->
+      <div class="flex items-center gap-2 text-xs">
+        <span class="text-[#7A684B] hidden md:inline mr-1">Nguồn phát ảnh:</span>
+        
+        <button id="btn-server-1" onclick="switchServer(1)" 
+                class="px-3.5 py-2 border border-[#D5C7B2] rounded-sm font-medium transition-all flex items-center gap-1.5 server-btn-active">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>Server 1 (GitHub)</span>
+        </button>
+
+        <button id="btn-server-2" onclick="switchServer(2)" 
+                class="px-3.5 py-2 border border-[#D5C7B2] bg-white text-[#2C2523] hover:border-[#B89655] rounded-sm font-medium transition-all flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span>Server 2 (Google Drive)</span>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- PHẦN 3: KHU VỰC LOADING & LƯỚI ALBUM ẢNH -->
+  <main class="max-w-7xl w-full mx-auto px-3 md:px-6 py-10 flex-grow">
+    
+    <!-- Biểu tượng xoay tròn Loading kèm hiệu ứng chữ "đang tải 715 ảnh . . ." -->
+    <div id="loading" class="text-center py-24">
+      <div class="luxury-spinner"></div>
+      <p class="font-serif-luxury italic text-2xl md:text-3xl text-[#2C2523] tracking-wide">
+        Đang tải 715 ảnh <span class="dot-1">.</span> <span class="dot-2">.</span> <span class="dot-3">.</span>
+      </p>
+      <p id="loading-subtext" class="text-xs uppercase tracking-[0.25em] text-[#8C7A5B] mt-3">
+        Đang kết nối Server 1 (GitHub)
+      </p>
+    </div>
+
+    <!-- Thông báo lỗi / gợi ý đổi Server -->
+    <div id="error-box" class="hidden text-center py-16 px-4 max-w-lg mx-auto bg-white border border-[#e5dccb] p-8 shadow-sm">
+      <p class="font-serif-luxury text-2xl text-red-800 mb-2">Không thể kết nối máy chủ hiện tại</p>
+      <p class="text-sm text-stone-600 mb-6">Máy chủ đang bảo trì hoặc quá tải. Vui lòng chuyển sang máy chủ dự phòng để tiếp tục xem ảnh.</p>
+      <button onclick="switchServer(currentServer === 1 ? 2 : 1)" 
+              class="px-6 py-2.5 bg-[#B89655] text-white text-xs uppercase tracking-widest hover:bg-[#2C2523] transition-colors">
+        Chuyển sang Server dự phòng ngay
+      </button>
+    </div>
+
+    <!-- Lưới hiển thị Album ảnh -->
+    <div id="gallery" class="masonry-grid"></div>
+
+  </main>
+
+  <!-- PHẦN 4: CHÂN TRANG (FOOTER) -->
+  <footer class="py-10 text-center border-t border-[#e5dccb] bg-[#F5EFE6]">
+    <p class="font-script text-3xl text-[#B89655] mb-1">Thanh Thảo &amp; Nam Phương</p>
+    <p class="text-xs uppercase tracking-[0.2em] text-[#8C7A5B]">Forever &amp; Always</p>
+  </footer>
+
+  <!-- SCRIPT XỬ LÝ ALBUM, 2 SERVER & NÚT TẢI ẢNH -->
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+  <script>
+    /*************************************************************************
+     * CẤU HÌNH THÔNG TIN CỦA BẠN TẠI ĐÂY
+     *************************************************************************/
+    const CONFIG = {
+      // 1. Cấu hình Server 1 (GitHub)
+      githubUsername: 'TEN_TAI_KHOAN_GITHUB', // Ví dụ: 'namphuong98'
+      githubRepo: 'TEN_REPO_GITHUB',          // Ví dụ: 'album-cuoi'
+      githubBranch: 'main',                   // Nhánh mặc định ('main' hoặc 'master')
+      githubFolder: 'images',                 // Thư mục chứa ảnh trên GitHub
+
+      // 2. Cấu hình Server 2 (Google Drive - Link Web App từ Google Apps Script)
+      googleDriveScriptUrl: 'DAN_LINK_WEB_APP_GOOGLE_APPS_SCRIPT_VAO_DAY',
+
+      // 3. Ảnh chủ đề dự phòng trên Drive (ID file ảnh bìa trên Drive nếu muốn dự phòng cả ảnh bìa)
+      backupCoverDriveId: '' 
+    };
+
+    let currentServer = 1;
+
+    // Đổi trạng thái giao diện nút bấm Server
+    function updateServerButtons(serverNum) {
+      const btn1 = document.getElementById('btn-server-1');
+      const btn2 = document.getElementById('btn-server-2');
+      if (serverNum === 1) {
+        btn1.className = 'px-3.5 py-2 border rounded-sm font-medium transition-all flex items-center gap-1.5 server-btn-active';
+        btn2.className = 'px-3.5 py-2 border border-[#D5C7B2] bg-white text-[#2C2523] hover:border-[#B89655] rounded-sm font-medium transition-all flex items-center gap-1.5';
+      } else {
+        btn2.className = 'px-3.5 py-2 border rounded-sm font-medium transition-all flex items-center gap-1.5 server-btn-active';
+        btn1.className = 'px-3.5 py-2 border border-[#D5C7B2] bg-white text-[#2C2523] hover:border-[#B89655] rounded-sm font-medium transition-all flex items-center gap-1.5';
+      }
+    }
+
+    // Hàm tải dữ liệu từ Server 1: GitHub (Dùng Git Trees API để hỗ trợ hơn 715 ảnh không bị giới hạn)
+    async function fetchFromGitHub() {
+      const apiUrl = `https://api.github.com/repos/${CONFIG.githubUsername}/${CONFIG.githubRepo}/git/trees/${CONFIG.githubBranch}?recursive=1`;
+      const res = await fetch(apiUrl);
+      if (!res.ok) throw new Error('Lỗi kết nối GitHub API');
+      const data = await res.json();
+
+      const prefix = CONFIG.githubFolder ? `${CONFIG.githubFolder}/` : '';
+      const imageFiles = data.tree.filter(item => 
+        item.type === 'blob' &&
+        item.path.startsWith(prefix) &&
+        /\.(jpe?g|png|webp|gif)$/i.test(item.path)
+      );
+
+      if (imageFiles.length === 0) throw new Error('Không tìm thấy ảnh trong thư mục GitHub');
+
+      return imageFiles.map((file, index) => {
+        const rawUrl = `https://raw.githubusercontent.com/${CONFIG.githubUsername}/${CONFIG.githubRepo}/${CONFIG.githubBranch}/${encodeURI(file.path)}`;
+        const thumbUrl = `https://wsrv.nl/?url=${encodeURIComponent(rawUrl)}&w=600&q=80&output=webp`;
+        const fileName = file.path.split('/').pop();
+        return {
+          name: `Ảnh kỷ niệm #${index + 1} (${fileName})`,
+          fileName: fileName,
+          thumbUrl: thumbUrl,
+          fullUrl: rawUrl,
+          downloadUrl: rawUrl
+        };
+      });
+    }
+
+    // Hàm tải dữ liệu từ Server 2: Google Drive
+    async function fetchFromGoogleDrive() {
+      const res = await fetch(CONFIG.googleDriveScriptUrl);
+      if (!res.ok) throw new Error('Lỗi kết nối Google Drive Script');
+      const files = await res.json();
+
+      if (!Array.isArray(files) || files.length === 0) {
+        throw new Error('Thư mục Google Drive trống');
+      }
+
+      return files.map((file, index) => ({
+        name: `Ảnh kỷ niệm #${index + 1} (${file.name})`,
+        fileName: file.name || `anh-cuoi-${index + 1}.jpg`,
+        thumbUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w600`,
+        fullUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w2500`,
+        downloadUrl: `https://drive.google.com/uc?export=download&id=${file.id}`
+      }));
+    }
+
+    // Hàm hiển thị danh sách ảnh lên lưới Album
+    function renderGallery(images) {
+      const galleryEl = document.getElementById('gallery');
+      const badgeEl = document.getElementById('photo-count-badge');
+      galleryEl.innerHTML = '';
+      badgeEl.textContent = `${images.length} Ảnh Kỷ Niệm`;
+
+      const fragment = document.createDocumentFragment();
+
+      images.forEach((img, idx) => {
+        const item = document.createElement('div');
+        item.className = 'masonry-item rounded-sm overflow-hidden group';
+        
+        item.innerHTML = `
+          <a href="${img.fullUrl}" 
+             data-fancybox="wedding-album" 
+             data-caption="${img.name}"
+             data-download-src="${img.downloadUrl}"
+             data-filename="${img.fileName}"
+             class="block relative overflow-hidden bg-[#F2ECE1]">
+            <img src="${img.thumbUrl}" 
+                 onerror="this.onerror=null; this.src='${img.fullUrl}';"
+                 alt="${img.name}" 
+                 loading="lazy" 
+                 decoding="async"
+                 class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700 block" />
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300 flex items-end justify-end p-2.5">
+              <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded">
+                #${idx + 1}
+              </span>
+            </div>
+          </a>
+        `;
+        fragment.appendChild(item);
+      });
+
+      galleryEl.appendChild(fragment);
+
+      // Cấu hình Fancybox: Xem từng tấm, chuyển qua lại, kèm nút Tải ảnh về máy
+      Fancybox.unbind('[data-fancybox="wedding-album"]');
+      Fancybox.bind('[data-fancybox="wedding-album"]', {
+        Carousel: {
+          infinite: true,
+        },
+        Thumbs: {
+          type: "classic",
+        },
+        Toolbar: {
+          display: {
+            left: ["infobar"],
+            middle: ["zoomIn", "zoomOut", "toggle1to1", "rotateCCW", "rotateCW"],
+            right: ["slideshow", "download", "thumbs", "close"],
+          },
+          items: {
+            download: {
+              tpl: `<button class="f-button" title="Tải ảnh này về máy" data-fancybox-download>
+                      <svg tabindex="-1" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 11l5 5 5-5M12 4v12"/>
+                      </svg>
+                    </button>`,
+              click: ( instance, event ) => {
+                event.preventDefault();
+                const slide = instance.getSlide();
+                const downloadUrl = slide.downloadSrc || slide.src;
+                const fileName = slide.triggerEl?.dataset?.filename || 'anh-cuoi-thanh-thao-nam-phuong.jpg';
+                forceDownloadImage(downloadUrl, fileName);
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Hàm ép trình duyệt tải file ảnh trực tiếp về điện thoại / máy tính
+    async function forceDownloadImage(url, fileName) {
+      try {
+        // Nếu là link Google Drive thì mở link export=download sẽ tự tải về máy
+        if (url.includes('drive.google.com')) {
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          return;
+        }
+        // Nếu là link GitHub, tải qua Blob để lưu thẳng file về máy thay vì mở tab mới
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(blobUrl);
+      } catch (e) {
+        window.open(url, '_blank');
+      }
+    }
+
+    // Hàm chuyển đổi qua lại giữa Server 1 và Server 2
+    async function switchServer(serverNum, isAutoFallback = false) {
+      currentServer = serverNum;
+      updateServerButtons(serverNum);
+
+      const loadingEl = document.getElementById('loading');
+      const loadingSubtext = document.getElementById('loading-subtext');
+      const errorBox = document.getElementById('error-box');
+      const galleryEl = document.getElementById('gallery');
+
+      errorBox.classList.add('hidden');
+      galleryEl.innerHTML = '';
+      loadingEl.classList.remove('hidden');
+
+      loadingSubtext.textContent = serverNum === 1 
+        ? 'Đang kết nối Server 1 (GitHub - Tốc độ cao)' 
+        : 'Đang kết nối Server 2 (Google Drive Dự Phòng)';
+
+      try {
+        const images = serverNum === 1 
+          ? await fetchFromGitHub() 
+          : await fetchFromGoogleDrive();
+
+        loadingEl.classList.add('hidden');
+        renderGallery(images);
+      } catch (error) {
+        console.error(`Lỗi ở Server ${serverNum}:`, error);
+        
+        // Tự động chuyển sang Server 2 nếu Server 1 bị lỗi trong lần đầu mở web
+        if (serverNum === 1 && !isAutoFallback && CONFIG.googleDriveScriptUrl.startsWith('http')) {
+          console.log('Tự động chuyển sang Server 2 (Google Drive)...');
+          switchServer(2, true);
+          return;
+        }
+
+        loadingEl.classList.add('hidden');
+        errorBox.classList.remove('hidden');
+      }
+    }
+
+    // Kích hoạt Fancybox cho ảnh bìa tiêu điểm và tải Server 1 khi vừa vào web
+    Fancybox.bind('[data-fancybox="hero-cover"]');
+    switchServer(1);
+  </script>
+</body>
+</html>
