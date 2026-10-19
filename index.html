@@ -8,12 +8,12 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts: Cổ điển & Sang trọng (Hỗ trợ đầy đủ tiếng Việt) -->
+  <!-- Google Fonts: Cổ điển & Sang trọng -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
   
-  <!-- Thư viện Fancybox v5 (Xem Album toàn màn hình, vuốt ảnh & tải ảnh) -->
+  <!-- Thư viện Fancybox v5 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
 
   <style>
@@ -134,7 +134,6 @@
       50%, 100% { opacity: 1; }
     }
 
-    /* Nút Server đang chọn */
     .server-btn-active {
       background-color: var(--charcoal);
       color: #fff;
@@ -146,30 +145,25 @@
 
   <!-- PHẦN 1: TRANG BÌA ALBUM & ẢNH CHỦ ĐỀ TIÊU ĐIỂM -->
   <section class="relative min-h-screen flex flex-col justify-center items-center px-4 py-12 border-b border-[#e5dccb] bg-gradient-to-b from-[#F5EFE6] to-[#F9F6F0]">
-    
-    <!-- Hoa văn góc trang trí -->
     <div class="text-center max-w-4xl mx-auto w-full">
       <p class="text-xs md:text-sm uppercase tracking-[0.4em] text-[#8C7A5B] mb-3">
         The Wedding Album
       </p>
 
-      <!-- Tên Cô Dâu & Chú Rể -->
       <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-semibold text-[#2C2523] tracking-wide mb-2">
         Thanh Thảo <span class="font-script text-[#B89655] font-normal px-2">&amp;</span> Nam Phương
       </h1>
 
-      <!-- Đường kẻ hoa văn cổ điển -->
       <div class="flex items-center justify-center gap-4 my-5">
         <span class="h-[1px] w-16 md:w-28 bg-[#B89655]/50"></span>
         <span class="text-[#B89655] text-lg">❖</span>
         <span class="h-[1px] w-16 md:w-28 bg-[#B89655]/50"></span>
       </div>
 
-      <!-- Khung Ảnh Chủ Đề Tiêu Điểm -->
+      <!-- Khung Ảnh Chủ Đề Tiêu Điểm (cover.jpg) -->
       <div class="classic-frame max-w-2xl mx-auto my-6 rounded-sm overflow-hidden">
-        <a id="hero-link" href="cover.jpg" data-fancybox="hero-cover" data-caption="Thanh Thảo & Nam Phương">
-          <img id="hero-img" 
-               src="cover.jpg" 
+        <a href="cover.jpg" data-fancybox="hero-cover" data-caption="Thanh Thảo & Nam Phương">
+          <img src="cover.jpg" 
                alt="Ảnh cưới chủ đề Thanh Thảo & Nam Phương" 
                class="w-full max-h-[62vh] object-cover block hover:scale-[1.02] transition-transform duration-700" />
         </a>
@@ -179,7 +173,6 @@
         "Trăm năm tình viên mãn – Bạc đầu nghĩa phu thê"
       </p>
 
-      <!-- Nút cuộn xuống xem Album -->
       <div class="mt-8">
         <a href="#album-section" class="inline-flex items-center gap-2 px-7 py-3 bg-[#2C2523] text-[#F9F6F0] text-xs uppercase tracking-[0.25em] hover:bg-[#B89655] transition-colors duration-300 rounded-sm shadow">
           <span>Mở Album Kỷ Niệm</span>
@@ -189,21 +182,18 @@
     </div>
   </section>
 
-  <!-- PHẦN 2: THANH ĐIỀU KHIỂN SERVER (STICKY BAR) -->
+  <!-- PHẦN 2: THANH ĐIỀU KHIỂN SERVER -->
   <nav id="album-section" class="sticky top-0 z-30 bg-[#F9F6F0]/95 backdrop-blur-md border-b border-[#e5dccb] py-3 px-4 shadow-sm">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-      
-      <!-- Tiêu đề nhỏ khi cuộn trang -->
       <div class="flex items-center gap-3">
         <span class="font-serif-luxury font-bold text-xl md:text-2xl text-[#2C2523]">
           Thanh Thảo &amp; Nam Phương
         </span>
         <span id="photo-count-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-[#EFE8DC] text-[#7A684B] border border-[#DFC690]">
-          Album Ảnh
+          715 Ảnh
         </span>
       </div>
 
-      <!-- Cụm nút chuyển đổi Server 1 (GitHub) và Server 2 (Google Drive) -->
       <div class="flex items-center gap-2 text-xs">
         <span class="text-[#7A684B] hidden md:inline mr-1">Nguồn phát ảnh:</span>
         
@@ -219,14 +209,13 @@
           <span>Server 2 (Google Drive)</span>
         </button>
       </div>
-
     </div>
   </nav>
 
-  <!-- PHẦN 3: KHU VỰC LOADING & LƯỚI ALBUM ẢNH -->
+  <!-- PHẦN 3: LOADING & LƯỚI ALBUM 715 ẢNH -->
   <main class="max-w-7xl w-full mx-auto px-3 md:px-6 py-10 flex-grow">
     
-    <!-- Biểu tượng xoay tròn Loading kèm hiệu ứng chữ "đang tải 715 ảnh . . ." -->
+    <!-- Biểu tượng xoay tròn Loading kèm hiệu ứng chữ "Đang tải 715 ảnh . . ." -->
     <div id="loading" class="text-center py-24">
       <div class="luxury-spinner"></div>
       <p class="font-serif-luxury italic text-2xl md:text-3xl text-[#2C2523] tracking-wide">
@@ -250,37 +239,42 @@
     <!-- Lưới hiển thị Album ảnh -->
     <div id="gallery" class="masonry-grid"></div>
 
+    <!-- Nút xem thêm (tự động kích hoạt khi cuộn xuống) -->
+    <div id="load-more-container" class="hidden text-center mt-10">
+      <button onclick="renderNextBatch()" class="px-6 py-2.5 border border-[#B89655] text-[#2C2523] text-xs uppercase tracking-widest hover:bg-[#B89655] hover:text-white transition-colors">
+        Hiển thị thêm ảnh kỷ niệm
+      </button>
+    </div>
+
   </main>
 
-  <!-- PHẦN 4: CHÂN TRANG (FOOTER) -->
+  <!-- PHẦN 4: CHÂN TRANG -->
   <footer class="py-10 text-center border-t border-[#e5dccb] bg-[#F5EFE6]">
     <p class="font-script text-3xl text-[#B89655] mb-1">Thanh Thảo &amp; Nam Phương</p>
     <p class="text-xs uppercase tracking-[0.2em] text-[#8C7A5B]">Forever &amp; Always</p>
   </footer>
 
-  <!-- SCRIPT XỬ LÝ ALBUM, 2 SERVER & NÚT TẢI ẢNH -->
+  <!-- SCRIPT XỬ LÝ ALBUM 715 ẢNH, 2 SERVER & NÚT TẢI ẢNH -->
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
   <script>
     /*************************************************************************
-     * CẤU HÌNH THÔNG TIN CỦA BẠN TẠI ĐÂY
+     * ĐIỀN THÔNG TIN GITHUB & GOOGLE DRIVE CỦA BẠN TẠI ĐÂY
      *************************************************************************/
     const CONFIG = {
-      // 1. Cấu hình Server 1 (GitHub)
-      githubUsername: 'TEN_TAI_KHOAN_GITHUB', // Ví dụ: 'namphuong98'
-      githubRepo: 'TEN_REPO_GITHUB',          // Ví dụ: 'album-cuoi'
-      githubBranch: 'main',                   // Nhánh mặc định ('main' hoặc 'master')
-      githubFolder: 'images',                 // Thư mục chứa ảnh trên GitHub
+      githubUsername: 'TEN_TAI_KHOAN_GITHUB', // Thay bằng tên tài khoản GitHub của bạn
+      githubRepo: 'TEN_REPO_GITHUB',          // Thay bằng tên Repository (ví dụ: 'album-cuoi')
+      githubBranch: 'main',                   
+      githubFolder: 'images',                 
 
-      // 2. Cấu hình Server 2 (Google Drive - Link Web App từ Google Apps Script)
-      googleDriveScriptUrl: 'DAN_LINK_WEB_APP_GOOGLE_APPS_SCRIPT_VAO_DAY',
-
-      // 3. Ảnh chủ đề dự phòng trên Drive (ID file ảnh bìa trên Drive nếu muốn dự phòng cả ảnh bìa)
-      backupCoverDriveId: '' 
+      // Dán link Web App từ Google Apps Script (Server 2) vào đây:
+      googleDriveScriptUrl: 'DAN_LINK_WEB_APP_GOOGLE_APPS_SCRIPT_VAO_DAY'
     };
 
     let currentServer = 1;
+    let allImages = [];
+    let renderedCount = 0;
+    const BATCH_SIZE = 60; // Tải 60 tấm mỗi nhịp cuộn để điện thoại lướt siêu mượt
 
-    // Đổi trạng thái giao diện nút bấm Server
     function updateServerButtons(serverNum) {
       const btn1 = document.getElementById('btn-server-1');
       const btn2 = document.getElementById('btn-server-2');
@@ -293,7 +287,7 @@
       }
     }
 
-    // Hàm tải dữ liệu từ Server 1: GitHub (Dùng Git Trees API để hỗ trợ hơn 715 ảnh không bị giới hạn)
+    // Server 1: Đọc toàn bộ 715 ảnh từ GitHub
     async function fetchFromGitHub() {
       const apiUrl = `https://api.github.com/repos/${CONFIG.githubUsername}/${CONFIG.githubRepo}/git/trees/${CONFIG.githubBranch}?recursive=1`;
       const res = await fetch(apiUrl);
@@ -311,7 +305,7 @@
 
       return imageFiles.map((file, index) => {
         const rawUrl = `https://raw.githubusercontent.com/${CONFIG.githubUsername}/${CONFIG.githubRepo}/${CONFIG.githubBranch}/${encodeURI(file.path)}`;
-        const thumbUrl = `https://wsrv.nl/?url=${encodeURIComponent(rawUrl)}&w=600&q=80&output=webp`;
+        const thumbUrl = `https://wsrv.nl/?url=${encodeURIComponent(rawUrl)}&w=500&q=75&output=webp`;
         const fileName = file.path.split('/').pop();
         return {
           name: `Ảnh kỷ niệm #${index + 1} (${fileName})`,
@@ -323,7 +317,7 @@
       });
     }
 
-    // Hàm tải dữ liệu từ Server 2: Google Drive
+    // Server 2: Đọc toàn bộ 715 ảnh từ Google Drive
     async function fetchFromGoogleDrive() {
       const res = await fetch(CONFIG.googleDriveScriptUrl);
       if (!res.ok) throw new Error('Lỗi kết nối Google Drive Script');
@@ -336,22 +330,26 @@
       return files.map((file, index) => ({
         name: `Ảnh kỷ niệm #${index + 1} (${file.name})`,
         fileName: file.name || `anh-cuoi-${index + 1}.jpg`,
-        thumbUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w600`,
+        thumbUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w500`,
         fullUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w2500`,
         downloadUrl: `https://drive.google.com/uc?export=download&id=${file.id}`
       }));
     }
 
-    // Hàm hiển thị danh sách ảnh lên lưới Album
-    function renderGallery(images) {
-      const galleryEl = document.getElementById('gallery');
-      const badgeEl = document.getElementById('photo-count-badge');
-      galleryEl.innerHTML = '';
-      badgeEl.textContent = `${images.length} Ảnh Kỷ Niệm`;
+    // Hiển thị từng đợt 60 ảnh khi cuộn trang
+    function renderNextBatch() {
+      const loadMoreContainer = document.getElementById('load-more-container');
+      if (renderedCount >= allImages.length) {
+        loadMoreContainer.classList.add('hidden');
+        return;
+      }
 
+      const galleryEl = document.getElementById('gallery');
+      const nextImages = allImages.slice(renderedCount, renderedCount + BATCH_SIZE);
       const fragment = document.createDocumentFragment();
 
-      images.forEach((img, idx) => {
+      nextImages.forEach((img, i) => {
+        const idx = renderedCount + i;
         const item = document.createElement('div');
         item.className = 'masonry-item rounded-sm overflow-hidden group';
         
@@ -361,7 +359,7 @@
              data-caption="${img.name}"
              data-download-src="${img.downloadUrl}"
              data-filename="${img.fileName}"
-             class="block relative overflow-hidden bg-[#F2ECE1]">
+             class="block relative overflow-hidden bg-[#F2ECE1] min-h-[140px]">
             <img src="${img.thumbUrl}" 
                  onerror="this.onerror=null; this.src='${img.fullUrl}';"
                  alt="${img.name}" 
@@ -370,7 +368,7 @@
                  class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700 block" />
             <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300 flex items-end justify-end p-2.5">
               <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded">
-                #${idx + 1}
+                #${idx + 1} / ${allImages.length}
               </span>
             </div>
           </a>
@@ -379,16 +377,28 @@
       });
 
       galleryEl.appendChild(fragment);
+      renderedCount += nextImages.length;
 
-      // Cấu hình Fancybox: Xem từng tấm, chuyển qua lại, kèm nút Tải ảnh về máy
+      if (renderedCount < allImages.length) {
+        loadMoreContainer.classList.remove('hidden');
+      } else {
+        loadMoreContainer.classList.add('hidden');
+      }
+    }
+
+    // Khởi tạo Album và cấu hình nút Tải ảnh
+    function initGallery(images) {
+      allImages = images;
+      renderedCount = 0;
+      document.getElementById('gallery').innerHTML = '';
+      document.getElementById('photo-count-badge').textContent = `${images.length} Ảnh Kỷ Niệm`;
+
+      renderNextBatch();
+
       Fancybox.unbind('[data-fancybox="wedding-album"]');
       Fancybox.bind('[data-fancybox="wedding-album"]', {
-        Carousel: {
-          infinite: true,
-        },
-        Thumbs: {
-          type: "classic",
-        },
+        Carousel: { infinite: true },
+        Thumbs: { type: "classic" },
         Toolbar: {
           display: {
             left: ["infobar"],
@@ -402,7 +412,7 @@
                         <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 11l5 5 5-5M12 4v12"/>
                       </svg>
                     </button>`,
-              click: ( instance, event ) => {
+              click: (instance, event) => {
                 event.preventDefault();
                 const slide = instance.getSlide();
                 const downloadUrl = slide.downloadSrc || slide.src;
@@ -415,10 +425,16 @@
       });
     }
 
-    // Hàm ép trình duyệt tải file ảnh trực tiếp về điện thoại / máy tính
+    // Tự động nạp thêm ảnh khi cuộn gần cuối trang
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
+        renderNextBatch();
+      }
+    });
+
+    // Tải file ảnh trực tiếp về máy tính / điện thoại
     async function forceDownloadImage(url, fileName) {
       try {
-        // Nếu là link Google Drive thì mở link export=download sẽ tự tải về máy
         if (url.includes('drive.google.com')) {
           const a = document.createElement('a');
           a.href = url;
@@ -429,7 +445,6 @@
           a.remove();
           return;
         }
-        // Nếu là link GitHub, tải qua Blob để lưu thẳng file về máy thay vì mở tab mới
         const response = await fetch(url);
         const blob = await response.blob();
         const blobUrl = URL.createObjectURL(blob);
@@ -445,7 +460,7 @@
       }
     }
 
-    // Hàm chuyển đổi qua lại giữa Server 1 và Server 2
+    // Chuyển đổi giữa Server 1 (GitHub) và Server 2 (Google Drive)
     async function switchServer(serverNum, isAutoFallback = false) {
       currentServer = serverNum;
       updateServerButtons(serverNum);
@@ -454,8 +469,10 @@
       const loadingSubtext = document.getElementById('loading-subtext');
       const errorBox = document.getElementById('error-box');
       const galleryEl = document.getElementById('gallery');
+      const loadMoreContainer = document.getElementById('load-more-container');
 
       errorBox.classList.add('hidden');
+      loadMoreContainer.classList.add('hidden');
       galleryEl.innerHTML = '';
       loadingEl.classList.remove('hidden');
 
@@ -469,23 +486,18 @@
           : await fetchFromGoogleDrive();
 
         loadingEl.classList.add('hidden');
-        renderGallery(images);
+        initGallery(images);
       } catch (error) {
         console.error(`Lỗi ở Server ${serverNum}:`, error);
-        
-        // Tự động chuyển sang Server 2 nếu Server 1 bị lỗi trong lần đầu mở web
         if (serverNum === 1 && !isAutoFallback && CONFIG.googleDriveScriptUrl.startsWith('http')) {
-          console.log('Tự động chuyển sang Server 2 (Google Drive)...');
           switchServer(2, true);
           return;
         }
-
         loadingEl.classList.add('hidden');
         errorBox.classList.remove('hidden');
       }
     }
 
-    // Kích hoạt Fancybox cho ảnh bìa tiêu điểm và tải Server 1 khi vừa vào web
     Fancybox.bind('[data-fancybox="hero-cover"]');
     switchServer(1);
   </script>
