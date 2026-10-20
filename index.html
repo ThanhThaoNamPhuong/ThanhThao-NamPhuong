@@ -2,7 +2,7 @@
 <html lang="vi" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Album Cưới | Thanh Thảo & Nam Phương</title>
   
   <!-- Tailwind CSS -->
@@ -11,7 +11,7 @@
   <!-- Google Fonts: Cổ điển & Sang trọng -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   
   <!-- Thư viện Fancybox v5 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
@@ -19,16 +19,26 @@
   <style>
     :root {
       --bg-cream: #F9F6F0;
+      --bg-paper: #F3EDE2;
       --gold-primary: #B89655;
-      --gold-light: #DFC690;
-      --charcoal: #2C2523;
+      --gold-dark: #967536;
+      --gold-light: #E2CFA5;
+      --charcoal: #26211F;
+    }
+
+    /* Chống tràn viền tuyệt đối trên mọi thiết bị di động */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+      background-color: var(--bg-cream);
+      color: var(--charcoal);
+      font-family: 'Montserrat', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--bg-cream);
-      color: var(--charcoal);
-      background-image: radial-gradient(#e6dfd3 0.6px, transparent 0.6px);
+      background-image: radial-gradient(#e4dccb 0.75px, transparent 0.75px);
       background-size: 24px 24px;
     }
 
@@ -43,61 +53,67 @@
     /* Khung viền cổ điển mạ vàng cho ảnh tiêu điểm */
     .classic-frame {
       position: relative;
-      padding: 14px;
-      background: #fff;
-      box-shadow: 0 20px 50px rgba(44, 37, 35, 0.12);
-      border: 1px solid #e5dccb;
+      padding: 10px;
+      background: #ffffff;
+      box-shadow: 0 20px 45px -10px rgba(38, 33, 31, 0.16);
+      border: 1px solid #e6dec8;
+    }
+    @media (min-width: 640px) {
+      .classic-frame {
+        padding: 16px;
+      }
     }
     .classic-frame::before {
       content: "";
       position: absolute;
-      inset: 6px;
+      inset: 5px;
       border: 1px solid var(--gold-primary);
       pointer-events: none;
       z-index: 10;
     }
+    @media (min-width: 640px) {
+      .classic-frame::before {
+        inset: 8px;
+      }
+    }
 
-    /* Bố cục Album Masonry */
-    .masonry-grid {
-      column-count: 2;
-      column-gap: 12px;
+    /* Hiệu ứng nền lấp lánh (Skeleton) khi ảnh đang tải giúp khung không bị trống */
+    .img-skeleton {
+      background: linear-gradient(90deg, #EFE9DE 25%, #F7F3EB 50%, #EFE9DE 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s infinite linear;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Thẻ ảnh trong Album */
+    .photo-card {
+      background: #ffffff;
+      padding: 5px;
+      border: 1px solid #e8dfd1;
+      box-shadow: 0 3px 10px rgba(38, 33, 31, 0.04);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+      will-change: transform;
+      content-visibility: auto;
+      contain-intrinsic-size: 280px;
     }
     @media (min-width: 768px) {
-      .masonry-grid {
-        column-count: 3;
-        column-gap: 18px;
-      }
-    }
-    @media (min-width: 1280px) {
-      .masonry-grid {
-        column-count: 4;
-        column-gap: 22px;
-      }
-    }
-    .masonry-item {
-      break-inside: avoid;
-      margin-bottom: 12px;
-      background: #fff;
-      padding: 6px;
-      border: 1px solid #ece4d5;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
-    }
-    @media (min-width: 768px) {
-      .masonry-item {
-        margin-bottom: 18px;
+      .photo-card {
         padding: 8px;
       }
-    }
-    .masonry-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 25px rgba(184, 150, 85, 0.18);
+      .photo-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 28px rgba(184, 150, 85, 0.16);
+        border-color: var(--gold-primary);
+      }
     }
 
     /* Vòng xoay Loading cổ điển sang trọng */
     .luxury-spinner {
-      width: 64px;
-      height: 64px;
+      width: 60px;
+      height: 60px;
       position: relative;
       margin: 0 auto 20px auto;
     }
@@ -109,14 +125,14 @@
     }
     .luxury-spinner::before {
       inset: 0;
-      border: 2px solid rgba(184, 150, 85, 0.2);
+      border: 2px solid rgba(184, 150, 85, 0.22);
       border-top-color: var(--gold-primary);
-      animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      animation: spin 1.1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     }
     .luxury-spinner::after {
-      inset: 10px;
+      inset: 9px;
       border: 1px dashed var(--gold-primary);
-      animation: spin-reverse 3s linear infinite;
+      animation: spin-reverse 2.8s linear infinite;
     }
     @keyframes spin {
       to { transform: rotate(360deg); }
@@ -126,165 +142,268 @@
     }
 
     /* Hiệu ứng dấu chấm chuyển động " . . ." */
-    .dot-1 { animation: blink 1.5s infinite 0.0s; }
-    .dot-2 { animation: blink 1.5s infinite 0.3s; }
-    .dot-3 { animation: blink 1.5s infinite 0.6s; }
+    .dot-1 { animation: blink 1.4s infinite 0.0s; }
+    .dot-2 { animation: blink 1.4s infinite 0.25s; }
+    .dot-3 { animation: blink 1.4s infinite 0.5s; }
     @keyframes blink {
       0%, 20% { opacity: 0; }
       50%, 100% { opacity: 1; }
     }
 
-    .server-btn-active {
-      background-color: var(--charcoal);
-      color: #fff;
-      border-color: var(--charcoal);
+    /* Tùy chỉnh giao diện Fancybox Lightbox sang trọng & mượt trên ĐT */
+    .fancybox__backdrop {
+      background: rgba(20, 17, 15, 0.96) !important;
+      backdrop-filter: blur(6px);
+    }
+    .fancybox__toolbar {
+      background: linear-gradient(to bottom, rgba(0,0,0,0.65), transparent) !important;
+      padding: 8px !important;
+    }
+    .fancybox__caption {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: #F9F6F0;
+      text-align: center;
+      padding: 10px 16px !important;
+    }
+
+    /* Ẩn thanh cuộn ngang cho dải nhảy trang */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#B89655] selection:text-white">
 
   <!-- PHẦN 1: TRANG BÌA ALBUM & ẢNH CHỦ ĐỀ TIÊU ĐIỂM -->
-  <section class="relative min-h-screen flex flex-col justify-center items-center px-4 py-12 border-b border-[#e5dccb] bg-gradient-to-b from-[#F5EFE6] to-[#F9F6F0]">
-    <div class="text-center max-w-4xl mx-auto w-full">
-      <p class="text-xs md:text-sm uppercase tracking-[0.4em] text-[#8C7A5B] mb-3">
-        The Wedding Album
-      </p>
+  <section class="relative w-full py-10 sm:py-16 px-4 sm:px-6 border-b border-[#e5dccb] bg-gradient-to-b from-[#F4EDE2] via-[#F9F6F0] to-[#F9F6F0]">
+    <div class="max-w-3xl mx-auto text-center">
+      
+      <!-- Nhãn phụ mở đầu -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EFE8DC]/80 border border-[#DFC690] mb-4">
+        <span class="text-[#B89655] text-[10px]">✦</span>
+        <span class="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-[#7A684B] font-medium">The Wedding Album</span>
+        <span class="text-[#B89655] text-[10px]">✦</span>
+      </div>
 
-      <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-semibold text-[#2C2523] tracking-wide mb-2">
-        Thanh Thảo <span class="font-script text-[#B89655] font-normal px-2">&amp;</span> Nam Phương
+      <!-- Tên Cô Dâu & Chú Rể (Tự động co giãn vừa vặn mọi màn hình ĐT) -->
+      <h1 class="font-serif-luxury text-3xl sm:text-5xl md:text-6xl font-bold text-[#26211F] tracking-wide leading-tight px-1">
+        <span class="inline-block">Thanh Thảo</span>
+        <span class="font-script text-[#B89655] font-normal text-4xl sm:text-6xl px-1.5 sm:px-3 align-middle">&amp;</span>
+        <span class="inline-block">Nam Phương</span>
       </h1>
 
-      <div class="flex items-center justify-center gap-4 my-5">
-        <span class="h-[1px] w-16 md:w-28 bg-[#B89655]/50"></span>
-        <span class="text-[#B89655] text-lg">❖</span>
-        <span class="h-[1px] w-16 md:w-28 bg-[#B89655]/50"></span>
+      <!-- Hoa văn phân cách cổ điển -->
+      <div class="flex items-center justify-center gap-3 sm:gap-4 my-4 sm:my-6">
+        <span class="h-[1px] w-14 sm:w-28 bg-gradient-to-r from-transparent to-[#B89655]"></span>
+        <span class="text-[#B89655] text-sm sm:text-base">❖</span>
+        <span class="h-[1px] w-14 sm:w-28 bg-gradient-to-l from-transparent to-[#B89655]"></span>
       </div>
 
-      <!-- Khung Ảnh Chủ Đề Tiêu Điểm (cover.jpg) -->
-      <div class="classic-frame max-w-2xl mx-auto my-6 rounded-sm overflow-hidden">
-        <a href="cover.JPG" data-fancybox="hero-cover" data-caption="Thanh Thảo & Nam Phương">
-          <img src="cover.JPG" 
+      <!-- Khung Ảnh Chủ Đề Tiêu Điểm (cover.JPG) -->
+      <div class="classic-frame max-w-xl mx-auto my-4 sm:my-6 rounded-sm overflow-hidden">
+        <div class="relative overflow-hidden bg-[#EFE9DE] cursor-pointer group" onclick="openCoverLightbox()">
+          <img id="hero-cover-img"
+               src="cover.JPG" 
                alt="Ảnh cưới chủ đề Thanh Thảo & Nam Phương" 
-               class="w-full max-h-[62vh] object-cover block hover:scale-[1.02] transition-transform duration-700" />
-        </a>
+               fetchpriority="high"
+               class="w-full max-h-[58vh] sm:max-h-[65vh] object-cover block group-hover:scale-[1.02] transition-transform duration-700" />
+          <div class="absolute bottom-3 right-3 bg-black/55 backdrop-blur-sm text-white text-[11px] px-3 py-1 rounded-full flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/>
+            </svg>
+            <span>Chạm để phóng to</span>
+          </div>
+        </div>
       </div>
 
-      <p class="font-serif-luxury italic text-xl md:text-2xl text-[#6E6259] mt-4">
+      <!-- Câu trích dẫn -->
+      <p class="font-serif-luxury italic text-lg sm:text-2xl text-[#63564E] mt-4 sm:mt-6 px-2">
         "Trăm năm tình viên mãn – Bạc đầu nghĩa phu thê"
       </p>
 
-      <div class="mt-8">
-        <a href="#album-section" class="inline-flex items-center gap-2 px-7 py-3 bg-[#2C2523] text-[#F9F6F0] text-xs uppercase tracking-[0.25em] hover:bg-[#B89655] transition-colors duration-300 rounded-sm shadow">
-          <span>Mở Album Kỷ Niệm</span>
-          <span>↓</span>
+      <!-- Nút cuộn xuống Album -->
+      <div class="mt-6 sm:mt-8">
+        <a href="#album-section" class="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3 bg-[#26211F] text-[#F9F6F0] text-[11px] sm:text-xs uppercase tracking-[0.22em] hover:bg-[#B89655] active:scale-95 transition-all duration-300 rounded-sm shadow-md">
+          <span>Mở Album 715 Ảnh</span>
+          <span class="text-sm animate-bounce">↓</span>
         </a>
       </div>
+
     </div>
   </section>
 
-  <!-- PHẦN 2: THANH ĐIỀU KHIỂN SERVER -->
-  <nav id="album-section" class="sticky top-0 z-30 bg-[#F9F6F0]/95 backdrop-blur-md border-b border-[#e5dccb] py-3 px-4 shadow-sm">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <span class="font-serif-luxury font-bold text-xl md:text-2xl text-[#2C2523]">
-          Thanh Thảo &amp; Nam Phương
-        </span>
-        <span id="photo-count-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-[#EFE8DC] text-[#7A684B] border border-[#DFC690]">
-          715 Ảnh
-        </span>
-      </div>
-
-      <div class="flex items-center gap-2 text-xs">
-        <span class="text-[#7A684B] hidden md:inline mr-1">Nguồn phát ảnh:</span>
+  <!-- PHẦN 2: THANH ĐIỀU KHIỂN THÔNG MINH (STICKY BAR GỌN GÀNG TRÊN ĐT) -->
+  <nav id="album-section" class="sticky top-0 z-30 bg-[#F9F6F0]/95 backdrop-blur-md border-b border-[#e2d8c5] shadow-sm">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5">
+      
+      <!-- Hàng 1: Tiêu đề + Chuyển Server + Đổi kiểu lưới -->
+      <div class="flex flex-wrap items-center justify-between gap-2">
         
-        <button id="btn-server-1" onclick="switchServer(1)" 
-                class="px-3.5 py-2 border border-[#D5C7B2] rounded-sm font-medium transition-all flex items-center gap-1.5 server-btn-active">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span>Server 1 (GitHub)</span>
-        </button>
+        <!-- Tên & Tổng số ảnh -->
+        <div class="flex items-center gap-2">
+          <span class="font-serif-luxury font-bold text-lg sm:text-xl text-[#26211F] truncate">
+            Thanh Thảo &amp; Nam Phương
+          </span>
+          <span id="photo-count-badge" class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#EFE8DC] text-[#7A684B] border border-[#DFC690] whitespace-nowrap">
+            715 Ảnh
+          </span>
+        </div>
 
-        <button id="btn-server-2" onclick="switchServer(2)" 
-                class="px-3.5 py-2 border border-[#D5C7B2] bg-white text-[#2C2523] hover:border-[#B89655] rounded-sm font-medium transition-all flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-          <span>Server 2 (Google Drive)</span>
-        </button>
+        <!-- Cụm công cụ: Chuyển Server & Đổi bố cục -->
+        <div class="flex items-center gap-1.5 sm:gap-2 w-full sm:w-auto justify-between sm:justify-end">
+          
+          <!-- Nút chuyển đổi Server 1 & Server 2 -->
+          <div class="inline-flex rounded-sm border border-[#D5C7B2] bg-white p-0.5 text-[11px] sm:text-xs">
+            <button id="btn-server-1" onclick="switchServer(1)" 
+                    class="px-2.5 sm:px-3 py-1.5 rounded-sm font-medium transition-all flex items-center gap-1.5 bg-[#26211F] text-white">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span>Server 1 (GitHub)</span>
+            </button>
+            <button id="btn-server-2" onclick="switchServer(2)" 
+                    class="px-2.5 sm:px-3 py-1.5 rounded-sm font-medium transition-all flex items-center gap-1.5 text-[#574C46] hover:text-[#26211F]">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+              <span>Server 2 (Drive)</span>
+            </button>
+          </div>
+
+          <!-- Nút đổi chế độ hiển thị: Khung Đều (Mặc định) vs Tự Nhiên -->
+          <button id="btn-layout-mode" onclick="toggleLayoutMode()" 
+                  title="Đổi kiểu sắp xếp khung ảnh"
+                  class="px-2.5 py-1.5 border border-[#D5C7B2] bg-white hover:border-[#B89655] rounded-sm text-[11px] sm:text-xs font-medium text-[#26211F] flex items-center gap-1 whitespace-nowrap transition-colors">
+            <svg class="w-3.5 h-3.5 text-[#B89655]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+            </svg>
+            <span id="layout-mode-label">Khung Đều</span>
+          </button>
+
+        </div>
       </div>
+
+      <!-- Hàng 2: Thanh nhảy nhanh đến từng mốc ảnh (Giúp xem 715 ảnh cực tiện) -->
+      <div id="quick-jump-bar" class="hidden pt-2 mt-2 border-t border-[#ece3d5] flex items-center gap-1.5 overflow-x-auto no-scrollbar text-[11px]">
+        <span class="text-[#8C7A5B] whitespace-nowrap mr-1 font-medium">Đi tới ảnh:</span>
+        <div id="quick-jump-buttons" class="flex items-center gap-1.5"></div>
+      </div>
+
     </div>
   </nav>
 
-  <!-- PHẦN 3: LOADING & LƯỚI ALBUM 715 ẢNH -->
-  <main class="max-w-7xl w-full mx-auto px-3 md:px-6 py-10 flex-grow">
+  <!-- PHẦN 3: KHU VỰC LOADING & LƯỚI ALBUM 715 ẢNH -->
+  <main class="max-w-7xl w-full mx-auto px-2.5 sm:px-6 py-6 sm:py-10 flex-grow">
     
     <!-- Biểu tượng xoay tròn Loading kèm hiệu ứng chữ "Đang tải 715 ảnh . . ." -->
-    <div id="loading" class="text-center py-24">
+    <div id="loading" class="text-center py-20 sm:py-28 px-4">
       <div class="luxury-spinner"></div>
-      <p class="font-serif-luxury italic text-2xl md:text-3xl text-[#2C2523] tracking-wide">
+      <p class="font-serif-luxury italic text-2xl sm:text-3xl text-[#26211F] tracking-wide">
         Đang tải 715 ảnh <span class="dot-1">.</span> <span class="dot-2">.</span> <span class="dot-3">.</span>
       </p>
-      <p id="loading-subtext" class="text-xs uppercase tracking-[0.25em] text-[#8C7A5B] mt-3">
+      <p id="loading-subtext" class="text-[11px] uppercase tracking-[0.22em] text-[#8C7A5B] mt-3">
         Đang kết nối Server 1 (GitHub)
       </p>
     </div>
 
     <!-- Thông báo lỗi / gợi ý đổi Server -->
-    <div id="error-box" class="hidden text-center py-16 px-4 max-w-lg mx-auto bg-white border border-[#e5dccb] p-8 shadow-sm">
-      <p class="font-serif-luxury text-2xl text-red-800 mb-2">Không thể kết nối máy chủ hiện tại</p>
-      <p class="text-sm text-stone-600 mb-6">Máy chủ đang bảo trì hoặc quá tải. Vui lòng chuyển sang máy chủ dự phòng để tiếp tục xem ảnh.</p>
+    <div id="error-box" class="hidden text-center py-14 px-5 max-w-md mx-auto bg-white border border-[#e5dccb] shadow-sm my-8">
+      <p class="font-serif-luxury text-2xl text-red-800 mb-2 font-semibold">Không thể kết nối máy chủ hiện tại</p>
+      <p class="text-xs sm:text-sm text-stone-600 mb-6 leading-relaxed">
+        Máy chủ đang bảo trì hoặc đường truyền bị gián đoạn. Vui lòng chuyển sang máy chủ dự phòng để tiếp tục xem Album.
+      </p>
       <button onclick="switchServer(currentServer === 1 ? 2 : 1)" 
-              class="px-6 py-2.5 bg-[#B89655] text-white text-xs uppercase tracking-widest hover:bg-[#2C2523] transition-colors">
-        Chuyển sang Server dự phòng ngay
+              class="px-6 py-2.5 bg-[#B89655] text-white text-xs uppercase tracking-widest hover:bg-[#26211F] transition-colors rounded-sm">
+        Chuyển sang Server dự phòng
       </button>
     </div>
 
-    <!-- Lưới hiển thị Album ảnh -->
-    <div id="gallery" class="masonry-grid"></div>
+    <!-- Lưới hiển thị Album ảnh (Tự động cân bằng, không bao giờ nhảy/giật trang) -->
+    <div id="gallery" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5 items-start"></div>
 
-    <!-- Nút xem thêm (tự động kích hoạt khi cuộn xuống) -->
-    <div id="load-more-container" class="hidden text-center mt-10">
-      <button onclick="renderNextBatch()" class="px-6 py-2.5 border border-[#B89655] text-[#2C2523] text-xs uppercase tracking-widest hover:bg-[#B89655] hover:text-white transition-colors">
-        Hiển thị thêm ảnh kỷ niệm
-      </button>
+    <!-- Điểm neo cảm biến tự động tải thêm ảnh khi cuộn tới gần cuối -->
+    <div id="scroll-sentinel" class="h-12 flex items-center justify-center mt-6">
+      <p id="batch-status" class="hidden text-xs text-[#8C7A5B] tracking-widest uppercase"></p>
     </div>
 
   </main>
 
+  <!-- Nút cuộn nhanh lên đầu trang -->
+  <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+          aria-label="Lên đầu trang"
+          class="fixed bottom-5 right-4 z-20 w-10 h-10 rounded-full bg-[#26211F]/85 text-[#F9F6F0] border border-[#B89655] shadow-lg flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:bg-[#B89655]">
+    ↑
+  </button>
+
   <!-- PHẦN 4: CHÂN TRANG -->
-  <footer class="py-10 text-center border-t border-[#e5dccb] bg-[#F5EFE6]">
-    <p class="font-script text-3xl text-[#B89655] mb-1">Thanh Thảo &amp; Nam Phương</p>
-    <p class="text-xs uppercase tracking-[0.2em] text-[#8C7A5B]">Forever &amp; Always</p>
+  <footer class="py-10 px-4 text-center border-t border-[#e5dccb] bg-[#F4EDE2]">
+    <p class="font-script text-3xl sm:text-4xl text-[#B89655] mb-1">Thanh Thảo &amp; Nam Phương</p>
+    <p class="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#8C7A5B]">Forever &amp; Always • 715 Khoảnh Khắc Kỷ Niệm</p>
   </footer>
 
-  <!-- SCRIPT XỬ LÝ ALBUM 715 ẢNH, 2 SERVER & NÚT TẢI ẢNH -->
+  <!-- SCRIPT TỐI ƯU HÓA HIỆU NĂNG CAO -->
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
   <script>
     /*************************************************************************
-     * ĐIỀN THÔNG TIN GITHUB & GOOGLE DRIVE CỦA BẠN TẠI ĐÂY
+     * CẤU HÌNH HỆ THỐNG CỦA THANH THẢO & NAM PHƯƠNG
      *************************************************************************/
     const CONFIG = {
-      githubUsername: 'ThanhThaoNamPhuong', // Thay bằng tên tài khoản GitHub của bạn
-      githubRepo: 'ThanhThao-NamPhuong',          // Thay bằng tên Repository (ví dụ: 'album-cuoi')
-      githubBranch: 'main',                   
-      githubFolder: 'images',                 
+      githubUsername: 'ThanhThaoNamPhuong',
+      githubRepo: 'ThanhThao-NamPhuong',
+      githubBranch: 'main',
+      githubFolder: 'images',
 
-      // Dán link Web App từ Google Apps Script (Server 2) vào đây:
+      // Link Web App từ Google Apps Script (Server 2 dự phòng)
       googleDriveScriptUrl: 'DAN_LINK_WEB_APP_GOOGLE_APPS_SCRIPT_VAO_DAY'
     };
 
     let currentServer = 1;
     let allImages = [];
     let renderedCount = 0;
-    const BATCH_SIZE = 60; // Tải 60 tấm mỗi nhịp cuộn để điện thoại lướt siêu mượt
+    let isUniformLayout = true; // true = Khung Đều 3:4 chuẩn Album (không lệch), false = Khung tỷ lệ tự nhiên
+    const BATCH_SIZE = 36;      // Chia lô 36 tấm (chia hết cho 2, 3, 4 cột) để hàng cuối luôn bằng phẳng
 
+    // Sắp xếp tên file tự nhiên (ví dụ: anh-2 đứng trước anh-10)
+    const naturalSort = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+
+    // Mở ảnh bìa tiêu điểm bằng Fancybox
+    function openCoverLightbox() {
+      Fancybox.show([
+        {
+          src: 'cover.JPG',
+          caption: 'Ảnh Chủ Đề | Thanh Thảo & Nam Phương'
+        }
+      ]);
+    }
+
+    // Cập nhật trạng thái nút chọn Server
     function updateServerButtons(serverNum) {
       const btn1 = document.getElementById('btn-server-1');
       const btn2 = document.getElementById('btn-server-2');
       if (serverNum === 1) {
-        btn1.className = 'px-3.5 py-2 border rounded-sm font-medium transition-all flex items-center gap-1.5 server-btn-active';
-        btn2.className = 'px-3.5 py-2 border border-[#D5C7B2] bg-white text-[#2C2523] hover:border-[#B89655] rounded-sm font-medium transition-all flex items-center gap-1.5';
+        btn1.className = 'px-2.5 sm:px-3 py-1.5 rounded-sm font-medium transition-all flex items-center gap-1.5 bg-[#26211F] text-white shadow-sm';
+        btn2.className = 'px-2.5 sm:px-3 py-1.5 rounded-sm font-medium transition-all flex items-center gap-1.5 text-[#574C46] hover:text-[#26211F]';
       } else {
-        btn2.className = 'px-3.5 py-2 border rounded-sm font-medium transition-all flex items-center gap-1.5 server-btn-active';
-        btn1.className = 'px-3.5 py-2 border border-[#D5C7B2] bg-white text-[#2C2523] hover:border-[#B89655] rounded-sm font-medium transition-all flex items-center gap-1.5';
+        btn2.className = 'px-2.5 sm:px-3 py-1.5 rounded-sm font-medium transition-all flex items-center gap-1.5 bg-[#26211F] text-white shadow-sm';
+        btn1.className = 'px-2.5 sm:px-3 py-1.5 rounded-sm font-medium transition-all flex items-center gap-1.5 text-[#574C46] hover:text-[#26211F]';
       }
+    }
+
+    // Chuyển đổi giữa chế độ Khung Đều (3:4) và Khung Tự Nhiên
+    function toggleLayoutMode() {
+      isUniformLayout = !isUniformLayout;
+      document.getElementById('layout-mode-label').textContent = isUniformLayout ? 'Khung Đều' : 'Tự Nhiên';
+      
+      // Cập nhật ngay cho toàn bộ ảnh đang hiển thị mà không cần tải lại từ đầu
+      const wrappers = document.querySelectorAll('.photo-aspect-wrapper');
+      wrappers.forEach(w => {
+        if (isUniformLayout) {
+          w.classList.add('aspect-[3/4]');
+        } else {
+          w.classList.remove('aspect-[3/4]');
+        }
+      });
     }
 
     // Server 1: Đọc toàn bộ 715 ảnh từ GitHub
@@ -295,23 +414,31 @@
       const data = await res.json();
 
       const prefix = CONFIG.githubFolder ? `${CONFIG.githubFolder}/` : '';
-      const imageFiles = data.tree.filter(item => 
-        item.type === 'blob' &&
-        item.path.startsWith(prefix) &&
-        /\.(jpe?g|png|webp|gif)$/i.test(item.path)
-      );
+      const imageFiles = data.tree
+        .filter(item => 
+          item.type === 'blob' &&
+          item.path.startsWith(prefix) &&
+          /\.(jpe?g|png|webp|gif)$/i.test(item.path)
+        )
+        .sort((a, b) => naturalSort.compare(a.path, b.path));
 
       if (imageFiles.length === 0) throw new Error('Không tìm thấy ảnh trong thư mục GitHub');
 
       return imageFiles.map((file, index) => {
         const rawUrl = `https://raw.githubusercontent.com/${CONFIG.githubUsername}/${CONFIG.githubRepo}/${CONFIG.githubBranch}/${encodeURI(file.path)}`;
-        const thumbUrl = `https://wsrv.nl/?url=${encodeURIComponent(rawUrl)}&w=500&q=75&output=webp`;
+        // Ảnh thu nhỏ (450px WebP) giúp lưới ảnh tải cực nhanh trên điện thoại
+        const thumbUrl = `https://wsrv.nl/?url=${encodeURIComponent(rawUrl)}&w=450&q=78&output=webp`;
+        // Ảnh xem toàn màn hình (1600px WebP) sắc nét và vuốt qua lại không bị khựng RAM
+        const viewUrl = `https://wsrv.nl/?url=${encodeURIComponent(rawUrl)}&w=1600&q=86&output=webp`;
         const fileName = file.path.split('/').pop();
+
         return {
-          name: `Ảnh kỷ niệm #${index + 1} (${fileName})`,
+          index: index,
+          name: `Khoảnh khắc #${index + 1} / ${imageFiles.length}`,
           fileName: fileName,
           thumbUrl: thumbUrl,
-          fullUrl: rawUrl,
+          viewUrl: viewUrl,
+          rawUrl: rawUrl,
           downloadUrl: rawUrl
         };
       });
@@ -327,20 +454,51 @@
         throw new Error('Thư mục Google Drive trống');
       }
 
-      return files.map((file, index) => ({
-        name: `Ảnh kỷ niệm #${index + 1} (${file.name})`,
-        fileName: file.name || `anh-cuoi-${index + 1}.jpg`,
-        thumbUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w500`,
-        fullUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w2500`,
-        downloadUrl: `https://drive.google.com/uc?export=download&id=${file.id}`
-      }));
+      files.sort((a, b) => naturalSort.compare(a.name || '', b.name || ''));
+
+      return files.map((file, index) => {
+        const viewUrl = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1800`;
+        return {
+          index: index,
+          name: `Khoảnh khắc #${index + 1} / ${files.length}`,
+          fileName: file.name || `anh-cuoi-${index + 1}.jpg`,
+          thumbUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w450`,
+          viewUrl: viewUrl,
+          rawUrl: viewUrl,
+          downloadUrl: `https://drive.google.com/uc?export=download&id=${file.id}`
+        };
+      });
     }
 
-    // Hiển thị từng đợt 60 ảnh khi cuộn trang
+    // Tạo thanh nhảy nhanh tới từng mốc 100 ảnh (Mở ngay ảnh tại mốc đó)
+    function buildQuickJumpBar(total) {
+      const bar = document.getElementById('quick-jump-bar');
+      const container = document.getElementById('quick-jump-buttons');
+      container.innerHTML = '';
+
+      if (total <= 60) {
+        bar.classList.add('hidden');
+        return;
+      }
+
+      bar.classList.remove('hidden');
+      const step = 100;
+      for (let i = 0; i < total; i += step) {
+        const btn = document.createElement('button');
+        const labelEnd = Math.min(i + step, total);
+        btn.className = 'px-2.5 py-1 rounded-sm bg-white border border-[#DFC690] text-[#574C46] hover:bg-[#B89655] hover:text-white transition-colors whitespace-nowrap font-medium';
+        btn.textContent = `#${i + 1}–${labelEnd}`;
+        btn.onclick = () => openAlbumAt(i);
+        container.appendChild(btn);
+      }
+    }
+
+    // Hiển thị từng đợt 36 ảnh vào lưới (Không bao giờ làm xê dịch các ảnh đã hiện phía trên)
     function renderNextBatch() {
-      const loadMoreContainer = document.getElementById('load-more-container');
+      const statusEl = document.getElementById('batch-status');
       if (renderedCount >= allImages.length) {
-        loadMoreContainer.classList.add('hidden');
+        statusEl.textContent = `Đã hiển thị trọn bộ ${allImages.length} ảnh kỷ niệm`;
+        statusEl.classList.remove('hidden');
         return;
       }
 
@@ -348,76 +506,88 @@
       const nextImages = allImages.slice(renderedCount, renderedCount + BATCH_SIZE);
       const fragment = document.createDocumentFragment();
 
-      nextImages.forEach((img, i) => {
-        const idx = renderedCount + i;
-        const item = document.createElement('div');
-        item.className = 'masonry-item rounded-sm overflow-hidden group';
-        
-        item.innerHTML = `
-          <a href="${img.fullUrl}" 
-             data-fancybox="wedding-album" 
-             data-caption="${img.name}"
-             data-download-src="${img.downloadUrl}"
-             data-filename="${img.fileName}"
-             class="block relative overflow-hidden bg-[#F2ECE1] min-h-[140px]">
+      nextImages.forEach((img) => {
+        const card = document.createElement('div');
+        card.className = 'photo-card rounded-sm cursor-pointer group';
+        card.onclick = () => openAlbumAt(img.index);
+
+        const aspectClass = isUniformLayout ? 'aspect-[3/4]' : '';
+
+        card.innerHTML = `
+          <div class="photo-aspect-wrapper ${aspectClass} w-full relative overflow-hidden bg-[#EFE9DE] img-skeleton">
             <img src="${img.thumbUrl}" 
-                 onerror="this.onerror=null; this.src='${img.fullUrl}';"
+                 onerror="this.onerror=null; this.src='${img.rawUrl}';"
+                 onload="this.parentElement.classList.remove('img-skeleton')"
                  alt="${img.name}" 
                  loading="lazy" 
                  decoding="async"
-                 class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700 block" />
-            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300 flex items-end justify-end p-2.5">
-              <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded">
-                #${idx + 1} / ${allImages.length}
-              </span>
+                 class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 block" />
+            <div class="absolute bottom-1.5 right-1.5 bg-black/55 backdrop-blur-[2px] text-white text-[10px] font-medium px-2 py-0.5 rounded-sm">
+              #${img.index + 1}
             </div>
-          </a>
+          </div>
         `;
-        fragment.appendChild(item);
+        fragment.appendChild(card);
       });
 
       galleryEl.appendChild(fragment);
       renderedCount += nextImages.length;
 
-      if (renderedCount < allImages.length) {
-        loadMoreContainer.classList.remove('hidden');
-      } else {
-        loadMoreContainer.classList.add('hidden');
-      }
+      statusEl.textContent = `Đang hiển thị ${renderedCount} / ${allImages.length} ảnh`;
+      statusEl.classList.remove('hidden');
     }
 
-    // Khởi tạo Album và cấu hình nút Tải ảnh
-    function initGallery(images) {
-      allImages = images;
-      renderedCount = 0;
-      document.getElementById('gallery').innerHTML = '';
-      document.getElementById('photo-count-badge').textContent = `${images.length} Ảnh Kỷ Niệm`;
+    // Mở chế độ xem từng tấm (Virtual Lightbox - Vuốt mượt toàn bộ 715 tấm không bị khựng)
+    function openAlbumAt(startIndex) {
+      const slides = allImages.map(img => ({
+        src: img.viewUrl,
+        thumb: img.thumbUrl,
+        caption: `${img.name} — Thanh Thảo & Nam Phương`,
+        downloadSrc: img.downloadUrl,
+        fileName: img.fileName
+      }));
 
-      renderNextBatch();
-
-      Fancybox.unbind('[data-fancybox="wedding-album"]');
-      Fancybox.bind('[data-fancybox="wedding-album"]', {
-        Carousel: { infinite: true },
-        Thumbs: { type: "classic" },
+      Fancybox.show(slides, {
+        startIndex: startIndex,
+        compact: false,
+        idle: 3500,
+        animated: true,
+        showClass: "f-fadeIn",
+        hideClass: "f-fadeOut",
+         Carousel: {
+          infinite: true,
+          transition: "slide",
+          preload: 2 // Chỉ tải trước 2 ảnh kế tiếp để vuốt mượt 60fps trên điện thoại
+        },
+        Images: {
+          zoom: true,
+          Panzoom: {
+            maxScale: 3
+          }
+        },
+        Thumbs: {
+          type: "modern",
+          showOnStart: false // Ẩn dải ảnh nhỏ lúc mới mở để màn hình điện thoại thoáng và không tốn RAM
+        },
         Toolbar: {
           display: {
             left: ["infobar"],
-            middle: ["zoomIn", "zoomOut", "toggle1to1", "rotateCCW", "rotateCW"],
-            right: ["slideshow", "download", "thumbs", "close"],
+            middle: [],
+            right: ["slideshow", "thumbs", "download", "close"],
           },
           items: {
             download: {
-              tpl: `<button class="f-button" title="Tải ảnh này về máy" data-fancybox-download>
-                      <svg tabindex="-1" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              tpl: `<button class="f-button" title="Tải ảnh gốc về máy">
+                      <svg tabindex="-1" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 11l5 5 5-5M12 4v12"/>
                       </svg>
                     </button>`,
               click: (instance, event) => {
                 event.preventDefault();
                 const slide = instance.getSlide();
-                const downloadUrl = slide.downloadSrc || slide.src;
-                const fileName = slide.triggerEl?.dataset?.filename || 'anh-cuoi-thanh-thao-nam-phuong.jpg';
-                forceDownloadImage(downloadUrl, fileName);
+                if (slide) {
+                  forceDownloadImage(slide.downloadSrc || slide.src, slide.fileName || 'anh-cuoi.jpg');
+                }
               }
             }
           }
@@ -425,14 +595,18 @@
       });
     }
 
-    // Tự động nạp thêm ảnh khi cuộn gần cuối trang
-    window.addEventListener('scroll', () => {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
-        renderNextBatch();
-      }
-    });
+    // Khởi tạo Album sau khi lấy danh sách ảnh
+    function initGallery(images) {
+      allImages = images;
+      renderedCount = 0;
+      document.getElementById('gallery').innerHTML = '';
+      document.getElementById('photo-count-badge').textContent = `${images.length} Ảnh`;
 
-    // Tải file ảnh trực tiếp về máy tính / điện thoại
+      buildQuickJumpBar(images.length);
+      renderNextBatch();
+    }
+
+    // Tải file ảnh gốc trực tiếp về điện thoại / máy tính
     async function forceDownloadImage(url, fileName) {
       try {
         if (url.includes('drive.google.com')) {
@@ -469,10 +643,10 @@
       const loadingSubtext = document.getElementById('loading-subtext');
       const errorBox = document.getElementById('error-box');
       const galleryEl = document.getElementById('gallery');
-      const loadMoreContainer = document.getElementById('load-more-container');
+      const statusEl = document.getElementById('batch-status');
 
       errorBox.classList.add('hidden');
-      loadMoreContainer.classList.add('hidden');
+      statusEl.classList.add('hidden');
       galleryEl.innerHTML = '';
       loadingEl.classList.remove('hidden');
 
@@ -498,7 +672,26 @@
       }
     }
 
-    Fancybox.bind('[data-fancybox="hero-cover"]');
+    // Cảm biến cuộn trang thông minh (IntersectionObserver) không gây giật lag điện thoại
+    const sentinel = document.getElementById('scroll-sentinel');
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && allImages.length > 0 && renderedCount < allImages.length) {
+        renderNextBatch();
+      }
+    }, { rootMargin: '600px' });
+    observer.observe(sentinel);
+
+    // Hiển thị nút lên đầu trang khi cuộn xuống sâu
+    const backToTopBtn = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 900) {
+        backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+      }
+    }, { passive: true });
+
+    // Khởi chạy Server 1 ngay khi mở trang
     switchServer(1);
   </script>
 </body>
