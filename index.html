@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Album Cưới | Thanh Thảo & Nam Phương</title>
   
+  <!-- Kết nối sớm tới máy chủ ảnh để giảm độ trễ mạng -->
+  <link rel="preconnect" href="https://wsrv.nl" crossorigin>
+  <link rel="preconnect" href="https://api.github.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
   <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   
   <!-- Fancybox v5 CSS -->
@@ -23,7 +27,6 @@
       --dark: #1E1B18;
     }
 
-    /* Chống tràn viền ngang tuyệt đối trên mọi màn hình điện thoại */
     html, body {
       max-width: 100%;
       overflow-x: hidden;
@@ -42,18 +45,7 @@
       font-family: 'Great Vibes', cursive;
     }
 
-    /* Hiệu ứng khung chờ (Skeleton) trước khi ảnh hiện ra */
-    .img-skeleton {
-      background: linear-gradient(90deg, #ece7df 25%, #f5f2ec 50%, #ece7df 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite linear;
-    }
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* Hiệu ứng ảnh hiện ra mượt mà như AlbumSE */
+    /* Khung chờ giữ chiều cao tối thiểu để trình duyệt chỉ tải đúng 6 ảnh đang thấy trên màn hình */
     .photo-item {
       position: relative;
       overflow: hidden;
@@ -61,12 +53,28 @@
       background-color: #ece7df;
       transform: translateZ(0);
     }
+    .photo-item.img-skeleton {
+      min-height: 190px;
+      background: linear-gradient(90deg, #ece7df 25%, #f5f2ec 50%, #ece7df 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite linear;
+    }
+    @media (min-width: 640px) {
+      .photo-item.img-skeleton {
+        min-height: 260px;
+      }
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
     .photo-item img {
       display: block;
       width: 100%;
       height: auto;
       opacity: 0;
-      transition: opacity 0.35s ease, transform 0.5s ease;
+      transition: opacity 0.25s ease, transform 0.45s ease;
     }
     .photo-item img.loaded {
       opacity: 1;
@@ -77,12 +85,12 @@
       }
     }
 
-    /* Vòng xoay Loading "Đang tải 715 ảnh . . ." */
+    /* Vòng xoay Loading */
     .luxury-spinner {
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
       position: relative;
-      margin: 0 auto 16px auto;
+      margin: 0 auto 14px auto;
     }
     .luxury-spinner::before,
     .luxury-spinner::after {
@@ -94,12 +102,12 @@
       inset: 0;
       border: 2px solid rgba(197, 160, 89, 0.25);
       border-top-color: var(--gold);
-      animation: spin 1s linear infinite;
+      animation: spin 0.9s linear infinite;
     }
     .luxury-spinner::after {
       inset: 8px;
       border: 1px dashed var(--gold);
-      animation: spin-reverse 2.5s linear infinite;
+      animation: spin-reverse 2.2s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes spin-reverse { to { transform: rotate(-360deg); } }
@@ -112,13 +120,11 @@
       50%, 100% { opacity: 1; }
     }
 
-    /* Ẩn thanh cuộn ngang trên các dải nút */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Giao diện trình xem ảnh toàn màn hình chuẩn App */
     .fancybox__backdrop {
-      background: rgba(12, 11, 10, 0.97) !important;
+      background: rgba(12, 11, 10, 0.96) !important;
     }
     .fancybox__toolbar {
       background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent) !important;
@@ -133,20 +139,18 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#C5A059] selection:text-white">
 
-  <!-- PHẦN 1: ẢNH BÌA HERO TRÀN VIỀN KIỂU ALBUMSE.ONLINE -->
-  <header class="relative w-full h-[64vh] sm:h-[78vh] max-h-[820px] bg-[#1E1B18] overflow-hidden select-none">
-    <!-- Ảnh Cover chủ đề -->
+  <!-- PHẦN 1: ẢNH BÌA HERO TRÀN VIỀN -->
+  <header class="relative w-full h-[62vh] sm:h-[76vh] max-h-[800px] bg-[#1E1B18] overflow-hidden select-none">
     <img id="hero-cover-img"
          src="cover.JPG" 
          alt="Thanh Thảo & Nam Phương" 
          fetchpriority="high"
+         decoding="async"
          onclick="openCoverLightbox()"
          class="w-full h-full object-cover object-center opacity-95 hover:scale-[1.01] transition-transform duration-1000 cursor-pointer" />
     
-    <!-- Lớp phủ Gradient đen sang trọng ở chân ảnh bìa -->
     <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 pointer-events-none"></div>
 
-    <!-- Nút phóng to ảnh bìa ở góc trên phải -->
     <button onclick="openCoverLightbox()" 
             class="absolute top-4 right-4 z-10 bg-black/40 hover:bg-black/65 backdrop-blur-md text-white/90 text-[11px] px-3 py-1.5 rounded-full border border-white/20 flex items-center gap-1.5 transition">
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,7 +159,6 @@
       <span>Xem ảnh bìa</span>
     </button>
 
-    <!-- Thông tin Cô Dâu & Chú Rể đè lên chân ảnh bìa -->
     <div class="absolute bottom-0 inset-x-0 z-10 p-5 sm:p-10 max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-4">
       <div class="text-white">
         <p class="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-[#E5C98B] mb-1.5 font-medium">
@@ -176,7 +179,6 @@
         </div>
       </div>
 
-      <!-- Cụm nút thao tác nhanh trên bìa -->
       <div class="flex items-center gap-2.5">
         <button onclick="startSlideshow()" 
                 class="px-4 py-2.5 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white border border-white/30 text-xs font-medium rounded-sm flex items-center gap-1.5 transition">
@@ -193,74 +195,71 @@
     </div>
   </header>
 
-  <!-- PHẦN 2: THANH ĐIỀU HƯỚNG GHIM ĐẦU TRANG (CHUẨN ALBUMSE) -->
+  <!-- PHẦN 2: THANH ĐIỀU HƯỚNG GHIM ĐẦU TRANG -->
   <nav id="gallery-nav" class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-2.5 sm:px-6">
       
-      <!-- Hàng trên: Chuyển đổi Server & Đổi số cột hiển thị -->
       <div class="flex items-center justify-between py-2 gap-2">
-        
-        <!-- Tabs chọn Server -->
-        <div class="flex items-center gap-1 sm:gap-2">
+        <!-- Nút chọn Server -->
+        <div class="flex items-center gap-1 sm:gap-1.5">
           <button id="btn-server-1" onclick="switchServer(1)" 
-                  class="px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 bg-[#1E1B18] text-white">
+                  class="px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all flex items-center gap-1.5 bg-[#1E1B18] text-white">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            <span>Server 1 (GitHub)</span>
+            <span>Server 1 (Siêu tốc)</span>
           </button>
 
           <button id="btn-server-2" onclick="switchServer(2)" 
-                  class="px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 bg-stone-100 text-stone-600 hover:bg-stone-200">
+                  class="px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all flex items-center gap-1.5 bg-stone-100 text-stone-600 hover:bg-stone-200">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
             <span>Server 2 (Drive)</span>
           </button>
         </div>
 
-        <!-- Nút đổi bố cục cột (1 cột / 2 cột / 3 cột) giống AlbumSE -->
+        <!-- Nút đổi số cột -->
         <div class="flex items-center gap-1 bg-stone-100 p-0.5 rounded-full border border-stone-200">
-          <button id="col-btn-1" onclick="changeColumnMode(1)" title="Xem 1 cột lớn"
+          <button id="col-btn-1" onclick="changeColumnMode(1)"
                   class="px-2.5 py-1 rounded-full text-[11px] font-medium text-stone-600 transition">
             1 Cột
           </button>
-          <button id="col-btn-2" onclick="changeColumnMode(2)" title="Xem 2 cột chuẩn"
+          <button id="col-btn-2" onclick="changeColumnMode(2)"
                   class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white text-[#1E1B18] shadow-sm transition">
             2 Cột
           </button>
-          <button id="col-btn-3" onclick="changeColumnMode(3)" title="Xem nhiều cột thu nhỏ"
+          <button id="col-btn-3" onclick="changeColumnMode(3)"
                   class="px-2.5 py-1 rounded-full text-[11px] font-medium text-stone-600 transition">
             Thu nhỏ
           </button>
         </div>
-
       </div>
 
-      <!-- Hàng dưới: Dải phân trang nhảy nhanh tới từng cụm ảnh (#1-100, #101-200...) -->
+      <!-- Thanh nhảy nhanh tới từng cụm 100 ảnh -->
       <div id="quick-jump-bar" class="hidden py-1.5 border-t border-stone-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-[11px]">
-        <span class="text-stone-400 whitespace-nowrap mr-1">Chọn nhanh:</span>
+        <span class="text-stone-400 whitespace-nowrap mr-1">Nhảy nhanh:</span>
         <div id="quick-jump-buttons" class="flex items-center gap-1.5"></div>
       </div>
 
     </div>
   </nav>
 
-  <!-- PHẦN 3: KHU VỰC LOADING & LƯỚI THÁC NƯỚC (WATERFALL MASONRY) -->
+  <!-- PHẦN 3: KHU VỰC LOADING & LƯỚI ẢNH WATERFALL -->
   <main class="max-w-7xl w-full mx-auto px-1.5 sm:px-4 md:px-6 pt-3 pb-12 flex-grow">
     
     <!-- Biểu tượng xoay tròn Loading kèm chữ "Đang tải 715 ảnh . . ." -->
-    <div id="loading" class="text-center py-24 px-4">
+    <div id="loading" class="text-center py-20 px-4">
       <div class="luxury-spinner"></div>
       <p class="font-serif-luxury italic text-2xl sm:text-3xl text-[#1E1B18] tracking-wide">
         Đang tải 715 ảnh <span class="dot-1">.</span> <span class="dot-2">.</span> <span class="dot-3">.</span>
       </p>
       <p id="loading-subtext" class="text-[11px] uppercase tracking-[0.2em] text-stone-500 mt-2">
-        Đang kết nối Server 1 (GitHub)
+        Đang kết nối Server 1 (GitHub CDN)
       </p>
     </div>
 
-    <!-- Hộp báo lỗi & tự động gợi ý chuyển Server -->
+    <!-- Hộp thông báo lỗi -->
     <div id="error-box" class="hidden text-center py-14 px-5 max-w-md mx-auto bg-white border border-stone-200 rounded-sm shadow-sm my-8">
       <p class="font-serif-luxury text-2xl text-red-800 mb-2 font-semibold">Không thể kết nối máy chủ hiện tại</p>
       <p class="text-xs sm:text-sm text-stone-600 mb-6 leading-relaxed">
-        Máy chủ đang bảo trì hoặc quá tải. Vui lòng bấm nút bên dưới để chuyển sang máy chủ dự phòng.
+        Vui lòng bấm nút bên dưới để chuyển sang máy chủ dự phòng.
       </p>
       <button onclick="switchServer(currentServer === 1 ? 2 : 1)" 
               class="px-6 py-2.5 bg-[#C5A059] text-white text-xs uppercase tracking-widest hover:bg-[#1E1B18] transition rounded-sm">
@@ -268,10 +267,10 @@
       </button>
     </div>
 
-    <!-- Lưới ảnh Waterfall (Các cột độc lập, không bao giờ bị nhảy ảnh hay thừa khoảng trống) -->
+    <!-- Lưới ảnh Waterfall -->
     <div id="waterfall-container" class="flex gap-1.5 sm:gap-2.5 md:gap-3.5 items-start w-full"></div>
 
-    <!-- Cảm biến tự động tải thêm ảnh khi lướt xuống -->
+    <!-- Cảm biến cuộn trang -->
     <div id="scroll-sentinel" class="h-14 flex items-center justify-center mt-6">
       <p id="batch-status" class="hidden text-[11px] text-stone-400 tracking-widest uppercase"></p>
     </div>
@@ -291,7 +290,7 @@
     <p class="text-[10px] uppercase tracking-[0.25em] text-stone-400">Wedding Photo Gallery • 715 Memories</p>
   </footer>
 
-  <!-- SCRIPT XỬ LÝ WATERFALL CHUẨN ALBUMSE & LIGHTBOX MƯỢT 60FPS -->
+  <!-- SCRIPT TĂNG TỐC TẢI ẢNH -->
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
   <script>
     /*************************************************************************
@@ -303,21 +302,37 @@
       githubBranch: 'main',
       githubFolder: 'images',
 
-      // Dán link Web App từ Google Apps Script (Server 2 dự phòng) vào đây:
+      // Link Web App từ Google Apps Script (Server 2 dự phòng)
       googleDriveScriptUrl: 'DAN_LINK_WEB_APP_GOOGLE_APPS_SCRIPT_VAO_DAY'
     };
+
+    // Đường dẫn gốc trên CDN GitHub Pages (Nhanh hơn raw.githubusercontent.com rất nhiều)
+    const PAGES_BASE_URL = `https://${CONFIG.githubUsername.toLowerCase()}.github.io/${CONFIG.githubRepo}`;
+    const CACHE_KEY_GH = `wedding_album_gh_v2_${CONFIG.githubUsername}_${CONFIG.githubRepo}`;
+
+    // Tự động tối ưu ảnh bìa cover.JPG qua CDN nén nhẹ (~85KB) để mở trang tức thì
+    (function optimizeHeroCover() {
+      const heroImg = document.getElementById('hero-cover-img');
+      if (window.location.hostname.includes('github.io')) {
+        const coverOrigin = `${PAGES_BASE_URL}/cover.JPG`;
+        heroImg.src = `https://wsrv.nl/?url=${encodeURIComponent(coverOrigin)}&w=1200&q=82&output=webp`;
+        heroImg.onerror = function() {
+          this.onerror = null;
+          this.src = 'cover.JPG';
+        };
+      }
+    })();
 
     let currentServer = 1;
     let allImages = [];
     let renderedCount = 0;
     let columnElements = [];
-    let columnHeights = []; // Theo dõi chiều cao ước lượng của từng cột để xếp ảnh khít tuyệt đối
-    let userColOverride = null; // null = Tự động theo màn hình (2 cột ĐT, 3-4 cột PC)
-    const BATCH_SIZE = 28; // Nạp 28 tấm mỗi lần cuộn giúp điện thoại nhẹ và phản hồi tức thì
+    let userColOverride = null;
+    // Giảm lô tải mỗi nhịp xuống 14 tấm để băng thông tập trung tối đa cho các ảnh đang nhìn thấy
+    const BATCH_SIZE = 14;
 
     const naturalSort = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 
-    // Tính số cột tối ưu theo kích thước màn hình hoặc nút người dùng chọn
     function getColumnCount() {
       if (userColOverride === 1) return 1;
       if (userColOverride === 2) return window.innerWidth >= 1024 ? 3 : 2;
@@ -325,35 +340,29 @@
 
       if (window.innerWidth >= 1280) return 4;
       if (window.innerWidth >= 768) return 3;
-      return 2; // Mặc định trên điện thoại là 2 cột chuẩn AlbumSE
+      return 2;
     }
 
-    // Đổi số cột khi bấm nút "1 Cột / 2 Cột / Thu nhỏ"
     function changeColumnMode(mode) {
       userColOverride = mode;
       [1, 2, 3].forEach(n => {
         const btn = document.getElementById(`col-btn-${n}`);
-        if (n === mode) {
-          btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-medium bg-white text-[#1E1B18] shadow-sm transition';
-        } else {
-          btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-medium text-stone-600 transition';
-        }
+        btn.className = n === mode
+          ? 'px-2.5 py-1 rounded-full text-[11px] font-medium bg-white text-[#1E1B18] shadow-sm transition'
+          : 'px-2.5 py-1 rounded-full text-[11px] font-medium text-stone-600 transition';
       });
 
-      // Dựng lại các cột với số ảnh đã nạp
       const targetCount = Math.max(renderedCount, BATCH_SIZE);
       setupWaterfallColumns();
       renderedCount = 0;
       renderUpTo(targetCount);
     }
 
-    // Khởi tạo các cột độc lập trong Waterfall Container
     function setupWaterfallColumns() {
       const container = document.getElementById('waterfall-container');
       container.innerHTML = '';
       const numCols = getColumnCount();
       columnElements = [];
-      columnHeights = new Array(numCols).fill(0);
 
       for (let i = 0; i < numCols; i++) {
         const col = document.createElement('div');
@@ -363,13 +372,12 @@
       }
     }
 
-    // Tìm cột đang ngắn nhất thực tế trên màn hình để chèn ảnh tiếp theo
     function getShortestColumnIndex() {
       let minIdx = 0;
-      let minHeight = columnElements[0].offsetHeight || columnHeights[0];
+      let minHeight = columnElements[0].offsetHeight;
 
       for (let i = 1; i < columnElements.length; i++) {
-        const h = columnElements[i].offsetHeight || columnHeights[i];
+        const h = columnElements[i].offsetHeight;
         if (h < minHeight) {
           minHeight = h;
           minIdx = i;
@@ -378,21 +386,25 @@
       return minIdx;
     }
 
-    // Tạo thẻ DOM cho 1 tấm ảnh chuẩn phong cách AlbumSE (Không viền thừa, giữ nguyên tỷ lệ gốc)
+    // Tạo thẻ ảnh với cơ chế ưu tiên 4 tấm đầu tiên (fetchpriority="high")
     function createPhotoElement(img) {
       const wrapper = document.createElement('div');
       wrapper.className = 'photo-item img-skeleton cursor-pointer group';
       wrapper.onclick = () => openAlbumAt(img.index);
 
+      const isFirstScreen = img.index < 4;
+      const loadingAttr = isFirstScreen ? 'eager' : 'lazy';
+      const priorityAttr = isFirstScreen ? 'fetchpriority="high"' : 'fetchpriority="low"';
+
       wrapper.innerHTML = `
         <img src="${img.thumbUrl}" 
              alt="${img.name}" 
-             loading="lazy" 
+             loading="${loadingAttr}" 
+             ${priorityAttr}
              decoding="async"
              onload="this.classList.add('loaded'); this.parentElement.classList.remove('img-skeleton');"
-             onerror="this.onerror=null; this.src='${img.rawUrl}'; this.classList.add('loaded');" />
+             onerror="this.onerror=null; this.src='${img.rawUrl}'; this.classList.add('loaded'); this.parentElement.classList.remove('img-skeleton');" />
         
-        <!-- Lớp phủ nhẹ khi chạm/di chuột như AlbumSE -->
         <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none flex items-end justify-between p-2">
           <span class="text-white text-[10px] font-medium drop-shadow">#${img.index + 1}</span>
           <button onclick="event.stopPropagation(); forceDownloadImage('${img.downloadUrl}', '${img.fileName}')" 
@@ -404,15 +416,13 @@
           </button>
         </div>
 
-        <!-- Số thứ tự nhỏ gọn ở góc dưới phải trên điện thoại -->
-        <span class="sm:hidden absolute bottom-1 right-1.5 text-[9px] text-white/90 bg-black/35 backdrop-blur-[1px] px-1.5 py-0.2 rounded-sm pointer-events-none">
+        <span class="sm:hidden absolute bottom-1 right-1.5 text-[9px] text-white/90 bg-black/35 px-1.5 py-0.2 rounded-sm pointer-events-none">
           ${img.index + 1}
         </span>
       `;
       return wrapper;
     }
 
-    // Nạp thêm 1 lô ảnh vào cột ngắn nhất
     function renderNextBatch() {
       renderUpTo(renderedCount + BATCH_SIZE);
     }
@@ -426,11 +436,9 @@
       for (let i = renderedCount; i < target; i++) {
         const img = allImages[i];
         const card = createPhotoElement(img);
-
-        // Chọn cột đang có chiều cao thấp nhất để hai cột luôn cân bằng
+        // Nhờ .img-skeleton có min-height: 190px nên getShortestColumnIndex() luôn chia đều 2 cột tức thì
         const colIdx = getShortestColumnIndex();
         columnElements[colIdx].appendChild(card);
-        columnHeights[colIdx] += 220;
       }
 
       renderedCount = target;
@@ -440,42 +448,76 @@
       statusEl.classList.remove('hidden');
     }
 
-    // Server 1: Đọc danh sách 715 ảnh từ GitHub
+    // Chuyển danh sách đường dẫn thành đối tượng ảnh tối ưu tốc độ
+    function buildGitHubImageObjects(paths) {
+      return paths.map((path, index) => {
+        const encodedPath = path.split('/').map(encodeURIComponent).join('/');
+        // Lấy trực tiếp từ Fastly CDN của GitHub Pages thay vì raw.githubusercontent.com
+        const pagesUrl = `${PAGES_BASE_URL}/${encodedPath}`;
+        
+        // Ảnh lưới: Rộng 360px, chất lượng 72%, chuẩn WebP -> Chỉ nặng ~18KB - 25KB/tấm, tải tức thì!
+        const thumbUrl = `https://wsrv.nl/?url=${encodeURIComponent(pagesUrl)}&w=360&q=72&output=webp`;
+        // Ảnh xem chi tiết: Rộng 1080px, chất lượng 82% -> Nặng ~80KB, mở và vuốt qua lại không cần chờ!
+        const viewUrl = `https://wsrv.nl/?url=${encodeURIComponent(pagesUrl)}&w=1080&q=82&output=webp`;
+        const fileName = path.split('/').pop();
+
+        return {
+          index: index,
+          name: `Ảnh #${index + 1} / ${paths.length}`,
+          fileName: fileName,
+          thumbUrl: thumbUrl,
+          viewUrl: viewUrl,
+          rawUrl: encodedPath, // Dự phòng trực tiếp từ thư mục nội bộ nếu wsrv.nl bận
+          downloadUrl: pagesUrl
+        };
+      });
+    }
+
+    // Server 1: Đọc danh sách 715 ảnh (Có lưu Cache vào trình duyệt để lần sau mở trong 0.1 giây)
     async function fetchFromGitHub() {
+      const cached = localStorage.getItem(CACHE_KEY_GH);
+      if (cached) {
+        try {
+          const parsedPaths = JSON.parse(cached);
+          if (Array.isArray(parsedPaths) && parsedPaths.length > 0) {
+            // Cập nhật ngầm trong nền phòng khi bạn có thêm ảnh mới
+            refreshGitHubCacheInBackground();
+            return buildGitHubImageObjects(parsedPaths);
+          }
+        } catch (e) {}
+      }
+
+      const paths = await fetchGitHubPathsFromNetwork();
+      return buildGitHubImageObjects(paths);
+    }
+
+    async function fetchGitHubPathsFromNetwork() {
       const apiUrl = `https://api.github.com/repos/${CONFIG.githubUsername}/${CONFIG.githubRepo}/git/trees/${CONFIG.githubBranch}?recursive=1`;
       const res = await fetch(apiUrl);
       if (!res.ok) throw new Error('Lỗi kết nối GitHub API');
       const data = await res.json();
 
       const prefix = CONFIG.githubFolder ? `${CONFIG.githubFolder}/` : '';
-      const imageFiles = data.tree
+      const paths = data.tree
         .filter(item => 
           item.type === 'blob' &&
           item.path.startsWith(prefix) &&
           /\.(jpe?g|png|webp|gif)$/i.test(item.path)
         )
-        .sort((a, b) => naturalSort.compare(a.path, b.path));
+        .map(item => item.path)
+        .sort((a, b) => naturalSort.compare(a, b));
 
-      if (imageFiles.length === 0) throw new Error('Không tìm thấy ảnh trong thư mục GitHub');
+      if (paths.length === 0) throw new Error('Không tìm thấy ảnh trong thư mục GitHub');
 
-      return imageFiles.map((file, index) => {
-        const rawUrl = `https://raw.githubusercontent.com/${CONFIG.githubUsername}/${CONFIG.githubRepo}/${CONFIG.githubBranch}/${encodeURI(file.path)}`;
-        // Ảnh hiển thị ngoài lưới (500px WebP) - Giữ nguyên tỷ lệ gốc, siêu nhẹ
-        const thumbUrl = `https://wsrv.nl/?url=${encodeURIComponent(rawUrl)}&w=500&q=80&output=webp`;
-        // Ảnh khi bấm vào xem chi tiết (1400px WebP) - Nét căng và vuốt qua lại không bị khựng
-        const viewUrl = `https://wsrv.nl/?url=${encodeURIComponent(rawUrl)}&w=1400&q=85&output=webp`;
-        const fileName = file.path.split('/').pop();
+      try {
+        localStorage.setItem(CACHE_KEY_GH, JSON.stringify(paths));
+      } catch (e) {}
 
-        return {
-          index: index,
-          name: `Ảnh #${index + 1} / ${imageFiles.length}`,
-          fileName: fileName,
-          thumbUrl: thumbUrl,
-          viewUrl: viewUrl,
-          rawUrl: rawUrl,
-          downloadUrl: rawUrl
-        };
-      });
+      return paths;
+    }
+
+    function refreshGitHubCacheInBackground() {
+      fetchGitHubPathsFromNetwork().catch(() => {});
     }
 
     // Server 2: Đọc danh sách 715 ảnh từ Google Drive
@@ -491,12 +533,12 @@
       files.sort((a, b) => naturalSort.compare(a.name || '', b.name || ''));
 
       return files.map((file, index) => {
-        const viewUrl = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1600`;
+        const viewUrl = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1200`;
         return {
           index: index,
           name: `Ảnh #${index + 1} / ${files.length}`,
           fileName: file.name || `anh-cuoi-${index + 1}.jpg`,
-          thumbUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w500`,
+          thumbUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w360`,
           viewUrl: viewUrl,
           rawUrl: viewUrl,
           downloadUrl: `https://drive.google.com/uc?export=download&id=${file.id}`
@@ -504,7 +546,6 @@
       });
     }
 
-    // Tạo thanh nhảy nhanh tới từng cụm 100 ảnh (Mở hoặc cuộn ngay tới cụm đó)
     function buildQuickJumpBar(total) {
       const bar = document.getElementById('quick-jump-bar');
       const container = document.getElementById('quick-jump-buttons');
@@ -527,18 +568,16 @@
       }
     }
 
-    // Mở ảnh bìa
     function openCoverLightbox() {
       Fancybox.show([{ src: 'cover.JPG', caption: 'Ảnh Bìa | Thanh Thảo & Nam Phương' }]);
     }
 
-    // Phát trình chiếu (Slideshow) tự động từ tấm đầu tiên
     function startSlideshow() {
       if (allImages.length === 0) return;
       openAlbumAt(0, true);
     }
 
-    // Mở trình xem từng ảnh (Hỗ trợ vuốt mượt qua toàn bộ 715 tấm + Nút tải ảnh gốc)
+    // Trình xem ảnh toàn màn hình (Preload = 1 để ưu tiên 100% tốc độ cho tấm đang xem)
     function openAlbumAt(startIndex, autoPlay = false) {
       const slides = allImages.map(img => ({
         src: img.viewUrl,
@@ -555,7 +594,7 @@
         Carousel: {
           infinite: true,
           transition: "slide",
-          preload: 2 // Chỉ nạp trước 2 ảnh sát bên để vuốt trên điện thoại mượt 60fps
+          preload: 1
         },
         Slideshow: {
           playOnStart: autoPlay,
@@ -563,7 +602,7 @@
         },
         Thumbs: {
           type: "classic",
-          showOnStart: false // Bấm biểu tượng lưới khi cần bật dải ảnh nhỏ bên dưới
+          showOnStart: false
         },
         Toolbar: {
           display: {
@@ -591,7 +630,6 @@
       });
     }
 
-    // Khởi tạo toàn bộ lưới ảnh
     function initGallery(images) {
       allImages = images;
       renderedCount = 0;
@@ -602,7 +640,6 @@
       renderNextBatch();
     }
 
-    // Tải file ảnh gốc trực tiếp về điện thoại / máy tính
     async function forceDownloadImage(url, fileName) {
       try {
         if (url.includes('drive.google.com')) {
@@ -630,20 +667,18 @@
       }
     }
 
-    // Cập nhật nút chọn Server 1 / Server 2
     function updateServerButtons(serverNum) {
       const btn1 = document.getElementById('btn-server-1');
       const btn2 = document.getElementById('btn-server-2');
       if (serverNum === 1) {
-        btn1.className = 'px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 bg-[#1E1B18] text-white shadow-sm';
-        btn2.className = 'px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 bg-stone-100 text-stone-600 hover:bg-stone-200';
+        btn1.className = 'px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all flex items-center gap-1.5 bg-[#1E1B18] text-white shadow-sm';
+        btn2.className = 'px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all flex items-center gap-1.5 bg-stone-100 text-stone-600 hover:bg-stone-200';
       } else {
-        btn2.className = 'px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 bg-[#1E1B18] text-white shadow-sm';
-        btn1.className = 'px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 bg-stone-100 text-stone-600 hover:bg-stone-200';
+        btn2.className = 'px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all flex items-center gap-1.5 bg-[#1E1B18] text-white shadow-sm';
+        btn1.className = 'px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all flex items-center gap-1.5 bg-stone-100 text-stone-600 hover:bg-stone-200';
       }
     }
 
-    // Chuyển đổi giữa Server 1 (GitHub) và Server 2 (Google Drive)
     async function switchServer(serverNum, isAutoFallback = false) {
       currentServer = serverNum;
       updateServerButtons(serverNum);
@@ -660,7 +695,7 @@
       loadingEl.classList.remove('hidden');
 
       loadingSubtext.textContent = serverNum === 1 
-        ? 'Đang kết nối Server 1 (GitHub - Tốc độ cao)' 
+        ? 'Đang kết nối Server 1 (GitHub CDN)' 
         : 'Đang kết nối Server 2 (Google Drive Dự Phòng)';
 
       try {
@@ -681,16 +716,15 @@
       }
     }
 
-    // Tự động nạp thêm ảnh khi lướt gần tới cuối trang (IntersectionObserver)
+    // Khoảng cách kích hoạt tải lô tiếp theo vừa phải (350px) để không tải dư thừa
     const sentinel = document.getElementById('scroll-sentinel');
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && allImages.length > 0 && renderedCount < allImages.length) {
         renderNextBatch();
       }
-    }, { rootMargin: '700px' });
+    }, { rootMargin: '350px' });
     observer.observe(sentinel);
 
-    // Tự động căn lại số cột nếu xoay ngang/dọc màn hình
     let lastColCount = getColumnCount();
     window.addEventListener('resize', () => {
       const newColCount = getColumnCount();
@@ -703,7 +737,6 @@
       }
     });
 
-    // Hiển thị nút lên đầu trang
     const backToTopBtn = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
       if (window.scrollY > 800) {
@@ -713,7 +746,6 @@
       }
     }, { passive: true });
 
-    // Khởi chạy Server 1 ngay khi vào web
     switchServer(1);
   </script>
 </body>
